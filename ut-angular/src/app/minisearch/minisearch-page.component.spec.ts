@@ -66,6 +66,8 @@ describe('MiniSearchPageComponent', () => {
     expect(note?.textContent).toContain('custom');
     expect(note?.textContent).toContain('exact');
     expect(note?.textContent).toContain('fuzzy');
+    expect(note?.textContent).toContain('buildSearchIndex');
+    expect(note?.textContent).toContain('evaluateStepFreshness');
   });
 
   it('should show search input when ready', async () => {

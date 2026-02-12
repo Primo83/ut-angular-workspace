@@ -61,6 +61,24 @@
         prowadzi bezpośrednio do odpowiedniego fragmentu dokumentacji.
       </li>
     </ul>
+    <p class="ms-custom-note__source">
+      Inspiracja: <code>src/app/shared/floating-toc/floating-toc.component.ts</code>
+    </p>
+    <ul class="ms-custom-note__func-list">
+      <li><code>buildSearchIndex(...)</code> — buduje indeks wyszukiwania z danych wejściowych.</li>
+      <li><code>toSearchResult(...)</code> — mapuje surowy wynik MiniSearch na model używany przez UI.</li>
+      <li><code>buildSnippet(...)</code> — wycina krótki fragment tekstu wokół dopasowania.</li>
+      <li><code>stripHtml(...)</code> — czyści HTML do czystego tekstu.</li>
+      <li><code>normalize(...)</code> — normalizuje tekst: małe litery + usuwanie diakrytyków.</li>
+      <li><code>tokens(...)</code> — rozbija tekst na tokeny do wyszukiwania.</li>
+      <li><code>ngramsFor(...)</code> — tworzy n-gramy pomagające przy dopasowaniach cząstkowych.</li>
+      <li><code>buildNgramsField(...)</code> — łączy n-gramy z wielu źródeł w jedno pole indeksu.</li>
+      <li><code>getStepContentPlainText(...)</code> — przygotowuje czystą treść kroku do indeksowania.</li>
+      <li>
+        <code>buildSectionFreshness(...)</code> + <code>evaluateStepFreshness(...)</code> —
+        liczy „świeżość” (NEW/RECENT/UPDATED), która wpływa na budowę dokumentów i prezentację wyników.
+      </li>
+    </ul>
   </section>
 
   <!-- LOADING STATE -->
