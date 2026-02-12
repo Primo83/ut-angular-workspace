@@ -1,11 +1,12 @@
 # Goal (incl. success criteria):
-- Zacommitować i wypchnąć do `origin/main` wynik taska `20260212-1353-wgranie-najnowszego-angulara-docker-compose_done`: baseline Angular w `ut-angular/` + Docker-only uruchamianie (`compose.yaml` + `Makefile`) na porcie hosta `4299`.
-- Sukces: po `git pull` + `make -C ut-angular up` aplikacja działa na `http://localhost:4299/`, a `make -C ut-angular test` i `make -C ut-angular lint` przechodzą w kontenerze; task ma komplet audytów planu i FINAL AUDIT.
+- Zrealizować task `20260212-1832-wypasiona-i-piekna-strona-minisearch_*`: zaprojektować i wdrożyć w `ut-angular/` czytelną, atrakcyjną stronę pod prezentację ~30 minut, która jest pokazem możliwości MiniSearch (przewodnik + zachęta + mini dokumentacja).
+- Sukces: strona jest dostępna w aplikacji (route + link), pokazuje kluczowe funkcje MiniSearch na realnym datasete; `make -C ut-angular lint` i `make -C ut-angular test` przechodzą; test manualny wykonany przez `agent-browser` i opisany w `additional-notes/`.
 
 # Constraints/Assumptions:
 - Nie commitować sekretów; `/.env.test-accounts` ma pozostać lokalne (ignorowane przez Git).
 - Zmiany w kodzie dopiero po przejściu bramki planu (decision-complete) dla danego zadania.
 - Operacje na taskach/SESSION wykonywać przez `./taskctl` (atomowo + walidacja).
+- Tailwind CSS jest dopuszczony w tym tasku (na razie jako opcja w planie).
 
 
 # Key decisions:
@@ -13,7 +14,7 @@
 
 # State:
 - Git: `main` śledzi `origin/main` (`https://github.com/Primo83/ut-angular-workspace.git`).
-- Tasks: `agents-tasks-knowledge/SESSION.md` wskazuje `20260212-1340-workspace-bootstrap_in-progress` (ID-T=01); `agents-tasks-knowledge/SESSION_gui-1.md` ma `current-task/current-id-t = none` (wskaźnik wyczyszczony po zamknięciu taska GUI).
+- Tasks: `agents-tasks-knowledge/SESSION.md` wskazuje `20260212-1340-workspace-bootstrap_in-progress` (ID-T=01); `agents-tasks-knowledge/SESSION_gui-1.md` wskazuje `20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress` (ID-T=01).
 - Repo: `ut-angular/` zawiera baseline Angular (m.in. `package.json`, `angular.json`, `src/`) + Docker-only uruchomienie (`compose.yaml` + `docker/Dockerfile.dev` + `Makefile`).
 
 # Done:
@@ -49,18 +50,22 @@
 - 2026-02-12 17:17:42 Wyczyszczono `agents-tasks-knowledge/SESSION_gui-1.md` do `none` i potwierdzono `./doctor --json` green.
 - 2026-02-12 17:24:06 Zacommitowano i wypchnięto zmiany do `origin/main` (commit: `004c51d`).
 - 2026-02-12 17:34:18 Uruchomiono ponownie GUI (`make -C ut-angular down`, `make -C ut-angular up-d`) i wykonano smoke test przez `agent-browser` (`agent-browser connect 9222`, open `http://localhost:4299/`).
+- 2026-02-12 18:42:43 Utworzono nowy task `20260212-1832-wypasiona-i-piekna-strona-minisearch_proposal` i rozpoczęto uzupełnianie planu (ID-T=01) oraz `additional-contexts.md`.
+- 2026-02-12 18:46:18 Przeniesiono task MiniSearch do `_in-progress`, dopisano materiały wejściowe (w tym prezentacja ~30 min + opis MiniSearch) i dodano `additional-notes/07.md` (placeholder).
+- 2026-02-12 18:56:54 Potwierdzono decyzje: route `/minisearch` oraz dataset demo jako mini-dokumentacja MiniSearch; Tailwind CSS dopuszczony jako opcja.
 
 # Now:
-- 2026-02-12 17:34:18 GUI działa na `http://localhost:4299/`; smoke test w `agent-browser` zakończony.
+- 2026-02-12 18:56:54 Commit zmian: nowy task MiniSearch (`_in-progress`) + zaktualizowany ledger i sesja `gui-1`.
 
 # Next:
-- (Opcjonalnie) Założyć follow-up task na P2 z FINAL AUDIT (DX/perf/Compose defaults).
+- Doprecyzować, czy strona MiniSearch ma zastąpić domyślny home, czy być osobną podstroną z CTA.
+- Dokończyć plan w `tasks.md` (ID-T=01 -> `done`) i przejść bramkę decision-complete (audyty planu).
 
 # Open questions (UNCONFIRMED if needed):
 - UNCONFIRMED Czy katalog `gui/` będzie docelowo usunięty/porzucony na rzecz `ut-angular/` (na razie oba istnieją)?
+- UNCONFIRMED Czy strona MiniSearch ma zastąpić stronę startową, czy być osobną podstroną z linkiem/CTA?
 
 # Working set (files/ids/commands):
-- Tasks: `agents-tasks-knowledge/tasks/20260212-1353-wgranie-najnowszego-angulara-docker-compose_done`
-- Files: `CONTINUITY.md`, `ut-angular/compose.yaml`, `ut-angular/docker/Dockerfile.dev`, `ut-angular/Makefile`, `ut-angular/README.md`, `agents-tasks-knowledge/tasks/20260212-1353-wgranie-najnowszego-angulara-docker-compose_done/additional-contexts.md`, `agents-tasks-knowledge/tasks/20260212-1353-wgranie-najnowszego-angulara-docker-compose_done/tasks.md`
-- Files: `agents-tasks-knowledge/tasks/20260212-1353-wgranie-najnowszego-angulara-docker-compose_done/additional-notes/20260212-1656-final-audit-claude.md`, `agents-tasks-knowledge/tasks/20260212-1353-wgranie-najnowszego-angulara-docker-compose_done/additional-notes/20260212-1656-final-audit-gemini.md`, `agents-tasks-knowledge/tasks/20260212-1353-wgranie-najnowszego-angulara-docker-compose_done/additional-notes/20260212-1656-final-audit-subagent-1.md`, `agents-tasks-knowledge/tasks/20260212-1353-wgranie-najnowszego-angulara-docker-compose_done/additional-notes/20260212-1656-final-audit-subagent-2.md`
-- Commands: `make -C ut-angular up`, `make -C ut-angular lint`, `make -C ut-angular test`, `git status`
+- Task: `agents-tasks-knowledge/tasks/20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress`
+- Files: `CONTINUITY.md`, `agents-tasks-knowledge/SESSION_gui-1.md`, `agents-tasks-knowledge/tasks/20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress/tasks.md`, `agents-tasks-knowledge/tasks/20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress/additional-contexts.md`
+- Commands: `./taskctl move-status ...`, `./taskctl set-session ...`, `make -C ut-angular up`, `make -C ut-angular lint`, `make -C ut-angular test`
