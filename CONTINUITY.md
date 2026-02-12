@@ -11,6 +11,8 @@
 
 # Key decisions:
 - Zadanie zakładamy przez `./taskctl new`, a sesję agenta przez `./taskctl set-session --agent gui-1`.
+- Strona MiniSearch: route `/minisearch`; dataset demo: mini-dokumentacja MiniSearch.
+- Tailwind CSS dopuszczony jako opcja w tym tasku.
 
 # State:
 - Git: `main` śledzi `origin/main` (`https://github.com/Primo83/ut-angular-workspace.git`).
@@ -53,9 +55,10 @@
 - 2026-02-12 18:42:43 Utworzono nowy task `20260212-1832-wypasiona-i-piekna-strona-minisearch_proposal` i rozpoczęto uzupełnianie planu (ID-T=01) oraz `additional-contexts.md`.
 - 2026-02-12 18:46:18 Przeniesiono task MiniSearch do `_in-progress`, dopisano materiały wejściowe (w tym prezentacja ~30 min + opis MiniSearch) i dodano `additional-notes/07.md` (placeholder).
 - 2026-02-12 18:56:54 Potwierdzono decyzje: route `/minisearch` oraz dataset demo jako mini-dokumentacja MiniSearch; Tailwind CSS dopuszczony jako opcja.
+- 2026-02-12 18:58:29 Zacommitowano zmiany: `12ece8b` (`chore: start minisearch showcase task`).
 
 # Now:
-- 2026-02-12 18:56:54 Commit zmian: nowy task MiniSearch (`_in-progress`) + zaktualizowany ledger i sesja `gui-1`.
+- 2026-02-12 18:58:29 Doprecyzowanie planu (ID-T=01): struktura strony pod prezentacje ~30 min + decyzja czy `/minisearch` ma zastapic home.
 
 # Next:
 - Doprecyzować, czy strona MiniSearch ma zastąpić domyślny home, czy być osobną podstroną z CTA.
