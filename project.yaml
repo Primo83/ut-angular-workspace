@@ -1,0 +1,35 @@
+schema_version: 2
+client_variants:
+  gemini: "legacy"
+
+project:
+  name: "frontend-only"
+  language: "pl"
+  structure: "monorepo"
+
+components:
+  gui:
+    enabled: true
+    directory: "gui"
+    framework: "angular"
+    version: "x.y"
+    mcp_servers:
+      browser: "playwright"
+      devtools: "chrome-devtools"
+
+agent_profiles:
+  - id: "ba"
+    name: "ba"
+    agent_type: "orchestrator"
+    type: "meta"
+    default_directory: "agents-tasks-knowledge"
+    description: "Analityk / właściciel planu (BA)"
+
+  - id: "gui-1"
+    name: "gui-1"
+    agent_type: "worker"
+    model: "gpt-5.2-codex"
+    type: "frontend"
+    component: "gui"
+    default_directory: "gui"
+    description: "Agent frontendowy"
