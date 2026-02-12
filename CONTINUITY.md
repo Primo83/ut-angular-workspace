@@ -9,22 +9,24 @@
 - Dodajemy `.gitignore` przed `git add .`, aby pominąć `/.env.test-accounts`.
 
 # State:
-- Repozytorium Git: brak (przed `git init`).
-- Remote `origin`: brak (przed `git remote add`).
+- Repozytorium Git: jest (zainicjalizowane).
+- Branch: `main` (śledzi `origin/main`).
+- Remote `origin`: `https://github.com/Primo83/ut-angular-workspace.git`.
 
 # Done:
 - 2026-02-12 13:47:30 Sprawdzono, że katalog nie jest repozytorium Git oraz że brak `README.md` i `.gitignore`.
 - 2026-02-12 13:47:54 Utworzono `README.md`, `.gitignore`, zainicjalizowano repo Git, wykonano commit i wypchnięto `main` do `origin`.
 - 2026-02-12 13:48:17 Zacommitowano i wypchnięto aktualizację `CONTINUITY.md`.
+- 2026-02-12 13:49:07 Uporządkowano `CONTINUITY.md` (stan i pytania) po udanym push do `origin/main`.
 
 # Now:
-- 2026-02-12 13:48:17 Stan repo czysty; `main` śledzi `origin/main`.
+- 2026-02-12 13:49:07 Cel osiągnięty; repo czyste, `main` śledzi `origin/main`, `/.env.test-accounts` nie jest śledzony.
 
 # Next:
-- Upewnić się, że `/.env.test-accounts` nie jest śledzony oraz że `origin`/`main` są poprawnie ustawione.
+- Brak.
 
 # Open questions (UNCONFIRMED if needed):
-- UNCONFIRMED Czy GitHub repo jest puste (brak refów) i przyjmie pierwszy push po HTTPS bez dodatkowej autoryzacji.
+- Brak.
 
 # Working set (files/ids/commands):
 - Files: `CONTINUITY.md`, `.gitignore`, `README.md`
