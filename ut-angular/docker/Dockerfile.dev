@@ -1,0 +1,17 @@
+# Dev image for running Angular CLI inside Docker (Docker-only workflow).
+# Container runs as arbitrary UID:GID provided by compose.
+
+FROM node:22.22.0-bookworm-slim
+
+WORKDIR /app
+
+ENV HOME=/tmp \
+    NPM_CONFIG_CACHE=/tmp/.npm \
+    NG_CLI_ANALYTICS=false
+
+# When a named volume is mounted at /app/node_modules, Docker initializes it by
+# copying the image's directory contents/permissions. Keep it writable so
+# `npm ci` works even with `user: ${UID}:${GID}`.
+RUN mkdir -p /app/node_modules /tmp/.npm \
+ && chmod 0777 /app/node_modules /tmp/.npm
+

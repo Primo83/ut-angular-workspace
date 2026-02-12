@@ -67,9 +67,13 @@ Efekt:
 
 ## Struktura projektu i organizacja modułów
 
-Źródła Angular znajdują się w `src/app`, zorganizowane domenowo (`login`, `main`, `shared`, `core`). Nowe funkcje twórz w `src/app/<feature>` i podpinaj je w `app-routing.module.ts`.
-Statyczne zasoby trzymaj w `src/assets`, a konfiguracje środowisk w `src/environments`; sekrety umieszczaj w plikach `.env` Dockera lub w ustawieniach Cloud Run.
-Artefakty end-to-end trzymamy w `e2e/`, a konteneryzację i automatyzację buildów w katalogu `docker/` oraz w głównym `Makefile`.
+Źródła Angular znajdują się w `ut-angular/src/`, a kod aplikacji w `ut-angular/src/app/` (standalone API, style guide `2025`):
+- routing: `ut-angular/src/app/app.routes.ts`
+- konfiguracja: `ut-angular/src/app/app.config.ts`
+- root component: `ut-angular/src/app/app.ts` + `ut-angular/src/app/app.html` + `ut-angular/src/app/app.scss`
+
+Statyczne zasoby są w `ut-angular/public/`, a globalne style w `ut-angular/src/styles.scss`.
+Konteneryzacja i uruchamianie dev odbywa się przez `ut-angular/compose.yaml` + `ut-angular/docker/` + `ut-angular/Makefile`.
 
 ## Komendy: build, testy i development
 
@@ -91,9 +95,12 @@ Używaj **dokładnie tych skryptów, które istnieją w `package.json`** – nie
 
 Jżeli wywołujesz `make` z innego katalogu niż ten z `Makefile`, pamiętaj o dodaniu `-C <ścieżka do katalogu z Makefile>`, np.: `make -C ut-angular up`.
 
-- `make up` – uruchamia cały stack dla GUI (kontener z Angular, reverse proxy itd.).
-- `make stop` – zatrzymuje kontenery związane z GUI.
-- `make logs` – podgląd logów kontenerów GUI (przydatne przy debugowaniu).
+- `make up` / `make up-d` – uruchamia dev‑serwer Angular w Dockerze; host: `http://localhost:4299/`.
+- `make down` – zatrzymuje kontenery związane z GUI.
+- `make clean` – `down -v` (usuwa volumes, w tym `node_modules`).
+- `make logs` – podgląd logów kontenera GUI.
+- `make test` – testy jednostkowe (non-watch) w kontenerze.
+- `make lint` – lint w kontenerze.
 
 Jeżeli katalog lub nazwy celów są inne, zaktualizuj je tutaj, ale zachowaj intencję:
 
