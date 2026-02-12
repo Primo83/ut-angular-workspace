@@ -47,9 +47,10 @@
 - 2026-02-12 17:15:15 Zapisano FINAL AUDIT implementacji (Gemini): `agents-tasks-knowledge/tasks/20260212-1353-wgranie-najnowszego-angulara-docker-compose_done/additional-notes/20260212-1656-final-audit-gemini.md` (PASS; P0=0/P1=0/P2=0).
 - 2026-02-12 17:16:14 Ustawiono `ID-T=08` na `done` i przeniesiono task do `_done`: `agents-tasks-knowledge/tasks/20260212-1353-wgranie-najnowszego-angulara-docker-compose_done`.
 - 2026-02-12 17:17:42 Wyczyszczono `agents-tasks-knowledge/SESSION_gui-1.md` do `none` i potwierdzono `./doctor --json` green.
+- 2026-02-12 17:24:06 Zacommitowano i wypchnięto zmiany do `origin/main` (commit: `004c51d`).
 
 # Now:
-- 2026-02-12 17:17:42 Przygotowanie commita i push do `origin/main` (zadanie jest zamknięte w `tasks/..._done`).
+- 2026-02-12 17:24:06 `main` wypchnięty; working tree czyste (`git status` bez zmian).
 
 # Next:
 - Zrobić commit + push zmian (Angular baseline + Docker-only + audyty).
