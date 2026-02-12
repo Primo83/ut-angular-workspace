@@ -97,6 +97,7 @@
 - 2026-02-12 23:55:27 Dodano subtask `ID-T=50` dla wzmianki o smaczkach z `floating-toc` i ustawiono `SESSION_gui-1` na `current-id-t: 50`.
 - 2026-02-12 23:57:12 Zaimplementowano `ID-T=50`: rozbudowano sekcje `.ms-custom-note` na stronie glownej `/minisearch` o liste wskazanych smaczkow (`buildSearchIndex`, `toSearchResult`, `buildSnippet`, `stripHtml`, `normalize`, `tokens`, `ngramsFor`, `buildNgramsField`, `getStepContentPlainText`, `buildSectionFreshness` + `evaluateStepFreshness`) z prostymi wyjasnieniami.
 - 2026-02-12 23:57:12 Potwierdzono walidacje `ID-T=50`: `make -C ut-angular test` = 51/51 PASS, `make -C ut-angular lint` = PASS; domknieto `ID-T=50` i przywrocono `SESSION_gui-1` na `ID-T=09`.
+- 2026-02-12 23:58:06 Wypchnieto implementacje `ID-T=50` na serwer: `origin/main`, commit `c9a2772`.
 
 # Now:
 - 2026-02-12 23:57:12 Trwa kontynuacja `ID-T=09` po domknieciu `ID-T=50` (przygotowanie do finalnych audytow zamykajacych task).
