@@ -6,17 +6,18 @@
 - Nie commitować sekretów; `/.env.test-accounts` ma pozostać lokalne (ignorowane przez Git).
 - Zmiany w kodzie dopiero po przejściu bramki planu (decision-complete) dla danego zadania.
 - Operacje na taskach/SESSION wykonywać przez `./taskctl` (atomowo + walidacja).
-- Tailwind CSS jest dopuszczony w tym tasku (na razie jako opcja w planie).
+- Decyzja UI dla tego taska: v1 bez Tailwind (SCSS komponentowe).
 
 
 # Key decisions:
 - Zadanie zakładamy przez `./taskctl new`, a sesję agenta przez `./taskctl set-session --agent gui-1`.
 - Strona MiniSearch: route `/minisearch`; dataset demo: mini-dokumentacja MiniSearch.
-- Tailwind CSS dopuszczony jako opcja w tym tasku.
+- `/minisearch` zastępuje domyślną stronę startową (`/`).
+- V1 bez Tailwind; warstwa UI realizowana przez SCSS komponentowe.
 
 # State:
 - Git: `main` śledzi `origin/main` (`https://github.com/Primo83/ut-angular-workspace.git`).
-- Tasks: `agents-tasks-knowledge/SESSION.md` wskazuje `20260212-1340-workspace-bootstrap_in-progress` (ID-T=01); `agents-tasks-knowledge/SESSION_gui-1.md` wskazuje `20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress` (ID-T=01).
+- Tasks: `agents-tasks-knowledge/SESSION.md` wskazuje `20260212-1340-workspace-bootstrap_in-progress` (ID-T=01); `agents-tasks-knowledge/SESSION_gui-1.md` wskazuje `20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress` (ID-T=02).
 - Repo: `ut-angular/` zawiera baseline Angular (m.in. `package.json`, `angular.json`, `src/`) + Docker-only uruchomienie (`compose.yaml` + `docker/Dockerfile.dev` + `Makefile`).
 
 # Done:
@@ -56,19 +57,25 @@
 - 2026-02-12 18:46:18 Przeniesiono task MiniSearch do `_in-progress`, dopisano materiały wejściowe (w tym prezentacja ~30 min + opis MiniSearch) i dodano `additional-notes/07.md` (placeholder).
 - 2026-02-12 18:56:54 Potwierdzono decyzje: route `/minisearch` oraz dataset demo jako mini-dokumentacja MiniSearch; Tailwind CSS dopuszczony jako opcja.
 - 2026-02-12 18:58:29 Zacommitowano zmiany: `12ece8b` (`chore: start minisearch showcase task`).
+- 2026-02-12 19:09:01 Właściciel potwierdził, że `/minisearch` ma zastąpić domyślną stronę startową.
+- 2026-02-12 19:25:00 Domknięto audyt planu `ID-T=01` dla taska MiniSearch: rundy `20260212-1909`, `20260212-1915`, `20260212-1920` (komplet 4 raportów/rundę; finalnie brak P0/P1, P2 nieblokujące w rundzie 3).
+- 2026-02-12 19:25:00 Ustawiono `ID-T=01` na `done` i przestawiono `agents-tasks-knowledge/SESSION_gui-1.md` na `current-id-t: 02`.
+- 2026-02-12 19:27:13 Zweryfikowano stan po audycie: komplet plików `*-plan-audit-*` istnieje, brak `*audit-blockers.md`, `./doctor --json` = `errors:0 warnings:0`.
+- 2026-02-12 20:07:54 Odczytano i zsynchronizowano ledger dla ad-hoc pytania o 30 zastosowan MiniSearch (bez zmian w kodzie).
+- 2026-02-12 20:09:59 Odczytano i zsynchronizowano ledger dla follow-up: dodatkowe 20 zastosowan MiniSearch (bez zmian w kodzie).
+- 2026-02-12 20:12:56 Odczytano i zsynchronizowano ledger dla prosby o 50 "smaczkow" prezentacyjnych MiniSearch; zweryfikowano mozliwosci API przez Context7 i zrodla upstream (README + `src/MiniSearch.ts`).
 
 # Now:
-- 2026-02-12 18:58:29 Doprecyzowanie planu (ID-T=01): struktura strony pod prezentacje ~30 min + decyzja czy `/minisearch` ma zastapic home.
+- 2026-02-12 20:12:56 Przygotowanie odpowiedzi ad-hoc: 50 smaczkow mozliwosci MiniSearch zorientowanych na atrakcyjna prezentacje.
 
 # Next:
-- Doprecyzować, czy strona MiniSearch ma zastąpić domyślny home, czy być osobną podstroną z CTA.
-- Dokończyć plan w `tasks.md` (ID-T=01 -> `done`) i przejść bramkę decision-complete (audyty planu).
+- Odpowiedziec uzytkownikowi lista 50 smaczkow MiniSearch.
+- Wrocic do realizacji `ID-T=02` (projekt UX/content strony pod prezentacje 30 min) i zaktualizowac statusy w `tasks.md`.
 
 # Open questions (UNCONFIRMED if needed):
 - UNCONFIRMED Czy katalog `gui/` będzie docelowo usunięty/porzucony na rzecz `ut-angular/` (na razie oba istnieją)?
-- UNCONFIRMED Czy strona MiniSearch ma zastąpić stronę startową, czy być osobną podstroną z linkiem/CTA?
 
 # Working set (files/ids/commands):
 - Task: `agents-tasks-knowledge/tasks/20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress`
-- Files: `CONTINUITY.md`, `agents-tasks-knowledge/SESSION_gui-1.md`, `agents-tasks-knowledge/tasks/20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress/tasks.md`, `agents-tasks-knowledge/tasks/20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress/additional-contexts.md`
-- Commands: `./taskctl move-status ...`, `./taskctl set-session ...`, `make -C ut-angular up`, `make -C ut-angular lint`, `make -C ut-angular test`
+- Files: `CONTINUITY.md`, `agents-tasks-knowledge/SESSION_gui-1.md`, `agents-tasks-knowledge/tasks/20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress/tasks.md`, `agents-tasks-knowledge/tasks/20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress/additional-contexts.md`, `agents-tasks-knowledge/tasks/20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress/additional-notes/20260212-19*-plan-audit-*.md`
+- Commands: `./taskctl set-id-t-status ...`, `./taskctl set-session ...`, `./doctor --json`, `make -C ut-angular lint`, `make -C ut-angular test`

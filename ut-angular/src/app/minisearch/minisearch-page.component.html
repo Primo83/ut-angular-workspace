@@ -1,0 +1,341 @@
+<!-- MiniSearch Showcase Page -->
+<div class="ms-page" tabindex="-1" (keydown)="onKeydown($event)">
+
+  <!-- HERO SECTION -->
+  <header class="ms-hero">
+    <div class="ms-hero__badge">~7 kB gzipped &middot; zero dependencies</div>
+    <h1 class="ms-hero__title">MiniSearch</h1>
+    <p class="ms-hero__subtitle">
+      Lightweight full-text search for the browser. Prefix, fuzzy, boosting,
+      filters, auto-suggest &mdash; all client-side, all instant.
+    </p>
+    <div class="ms-hero__stats">
+      @if (svc.state().status === 'ready') {
+        <span class="ms-stat">
+          <strong>{{ svc.documentCount() }}</strong> docs indexed
+        </span>
+        <span class="ms-stat">
+          <strong>{{ svc.indexTimeMs() | number:'1.0-0' }} ms</strong> index time
+        </span>
+        <span class="ms-stat">
+          <strong>{{ svc.categories().length }}</strong> categories
+        </span>
+      }
+    </div>
+  </header>
+
+  <!-- LOADING STATE -->
+  @if (svc.state().status === 'loading') {
+    <section class="ms-status ms-status--loading" aria-live="polite">
+      <div class="ms-spinner"></div>
+      <p>Loading and indexing documents&hellip;</p>
+    </section>
+  }
+
+  <!-- ERROR STATE -->
+  @if (svc.state().status === 'error') {
+    <section class="ms-status ms-status--error" role="alert">
+      <span class="ms-status__icon">!</span>
+      <p>{{ svc.state().error }}</p>
+      <button class="ms-btn ms-btn--primary" (click)="svc.loadAndIndex()">Retry</button>
+    </section>
+  }
+
+  <!-- MAIN CONTENT (when ready) -->
+  @if (svc.state().status === 'ready') {
+
+    <!-- INTERACTIVE PLAYGROUND -->
+    <section class="ms-playground" aria-label="Search playground">
+      <h2 class="ms-section-title">Interactive Playground</h2>
+      <p class="ms-section-desc">Try searching the MiniSearch documentation dataset in real time.</p>
+
+      <!-- Search Input -->
+      <div class="ms-search-bar" role="search">
+        <svg class="ms-search-bar__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+        <input
+          #searchInput
+          type="search"
+          class="ms-search-bar__input"
+          placeholder="Search docs... (Ctrl+K)"
+          [ngModel]="queryInput"
+          (ngModelChange)="onQueryChange($event)"
+          aria-label="Search MiniSearch documentation"
+        />
+        @if (queryInput) {
+          <button class="ms-search-bar__clear" (click)="clearSearch()" aria-label="Clear search">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          </button>
+        }
+      </div>
+
+      <!-- Search Controls -->
+      <div class="ms-controls">
+        <button
+          class="ms-toggle"
+          [class.ms-toggle--active]="svc.options().prefix"
+          (click)="toggleOption('prefix')"
+          [attr.aria-pressed]="svc.options().prefix"
+        >Prefix</button>
+        <button
+          class="ms-toggle"
+          [class.ms-toggle--active]="svc.options().fuzzy"
+          (click)="toggleOption('fuzzy')"
+          [attr.aria-pressed]="svc.options().fuzzy"
+        >Fuzzy</button>
+        <button
+          class="ms-toggle"
+          [class.ms-toggle--active]="svc.options().boost"
+          (click)="toggleOption('boost')"
+          [attr.aria-pressed]="svc.options().boost"
+        >Boost title</button>
+        <button
+          class="ms-toggle"
+          [class.ms-toggle--active]="svc.options().combineWith === 'AND'"
+          (click)="toggleCombine()"
+          [attr.aria-pressed]="svc.options().combineWith === 'AND'"
+        >{{ svc.options().combineWith }}</button>
+      </div>
+
+      <!-- Category Filters -->
+      <div class="ms-filters" role="group" aria-label="Category filters">
+        <button
+          class="ms-filter-chip"
+          [class.ms-filter-chip--active]="svc.options().categoryFilter === null"
+          [attr.aria-pressed]="svc.options().categoryFilter === null"
+          (click)="setCategoryFilter(null)"
+        >All</button>
+        @for (cat of svc.categories(); track cat) {
+          <button
+            class="ms-filter-chip"
+            [class.ms-filter-chip--active]="svc.options().categoryFilter === cat"
+            [attr.aria-pressed]="svc.options().categoryFilter === cat"
+            (click)="setCategoryFilter(cat)"
+          >
+            {{ getCategoryLabel(cat) }}
+            @if (svc.facetCounts()[cat]; as count) {
+              <span class="ms-filter-chip__count">{{ count }}</span>
+            }
+          </button>
+        }
+      </div>
+
+      <!-- Suggestions -->
+      @if (svc.suggestions().length > 0 && queryInput) {
+        <div class="ms-suggestions" role="group" aria-label="Search suggestions">
+          <span class="ms-suggestions__label">Suggestions:</span>
+          @for (s of svc.suggestions(); track s.suggestion) {
+            <button
+              class="ms-suggestion-chip"
+              (click)="onSuggestionClick(s.suggestion)"
+            >{{ s.suggestion }}</button>
+          }
+        </div>
+      }
+
+      <!-- Search Meta -->
+      @if (queryInput) {
+        <div class="ms-meta" aria-live="polite">
+          <span>{{ svc.results().length }} results</span>
+          <span class="ms-meta__dot">&middot;</span>
+          <span>{{ svc.searchTimeMs() | number:'1.2-2' }} ms</span>
+        </div>
+      }
+
+      <!-- Results -->
+      @if (queryInput && svc.results().length > 0) {
+        <ul class="ms-results" role="list">
+          @for (r of svc.results(); track trackByResultId($index, r)) {
+            <li class="ms-result">
+              <div class="ms-result__header">
+                <span class="ms-result__category ms-result__category--{{ r.category }}">
+                  {{ getCategoryLabel(r.category) }}
+                </span>
+                <span class="ms-result__score" [title]="'Relevance score: ' + r.score">
+                  {{ formatScore(r.score) }}
+                </span>
+              </div>
+              <h3 class="ms-result__title" [innerHTML]="r.highlightedTitle"></h3>
+              <p class="ms-result__text" [innerHTML]="r.highlightedText"></p>
+              @if (r.tags && r.tags.length > 0) {
+                <div class="ms-result__tags">
+                  @for (tag of r.tags; track tag) {
+                    <span class="ms-tag">{{ tag }}</span>
+                  }
+                </div>
+              }
+            </li>
+          }
+        </ul>
+      }
+
+      <!-- Empty state -->
+      @if (queryInput && svc.results().length === 0) {
+        <div class="ms-empty" aria-live="polite">
+          <p class="ms-empty__title">No results found</p>
+          <p class="ms-empty__hint">
+            Try a different query, enable fuzzy search for typo tolerance,
+            or remove category filters.
+          </p>
+        </div>
+      }
+    </section>
+
+    <!-- MINI DOCUMENTATION -->
+    <section class="ms-docs" aria-label="API documentation snippets">
+      <h2 class="ms-section-title">Quick Reference</h2>
+      <p class="ms-section-desc">
+        Key API patterns you can copy and use right away.
+      </p>
+
+      <div class="ms-snippets">
+        @for (snippet of codeSnippets; track snippet.id) {
+          <div class="ms-snippet">
+            <div class="ms-snippet__header">
+              <h3 class="ms-snippet__title">{{ snippet.title }}</h3>
+              <button
+                class="ms-snippet__copy"
+                (click)="copySnippet(snippet.code, snippet.id)"
+                [attr.aria-label]="'Copy ' + snippet.title + ' snippet'"
+              >
+                @if (copiedSnippet() === snippet.id) {
+                  <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Copied!</span>
+                } @else {
+                  <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  <span>Copy</span>
+                }
+              </button>
+            </div>
+            <pre class="ms-snippet__code"><code>{{ snippet.code }}</code></pre>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- COMPARISON TABLE -->
+    <section class="ms-comparison" aria-label="Library comparison">
+      <h2 class="ms-section-title">How Does It Compare?</h2>
+      <div class="ms-table-wrapper">
+        <table class="ms-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="ms-table__highlight">MiniSearch</th>
+              <th>Lunr.js</th>
+              <th>Fuse.js</th>
+              <th>FlexSearch</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Size (gzipped)</td>
+              <td class="ms-table__highlight">~7 kB</td>
+              <td>~8 kB</td>
+              <td>~5 kB</td>
+              <td>~6 kB</td>
+            </tr>
+            <tr>
+              <td>Fuzzy search</td>
+              <td class="ms-table__highlight">Yes</td>
+              <td>Yes</td>
+              <td>Yes (core)</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Prefix search</td>
+              <td class="ms-table__highlight">Yes</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Incremental index</td>
+              <td class="ms-table__highlight">Yes</td>
+              <td>No (rebuild)</td>
+              <td>N/A</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Auto-suggest</td>
+              <td class="ms-table__highlight">Built-in</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>TF-IDF ranking</td>
+              <td class="ms-table__highlight">Yes</td>
+              <td>Yes</td>
+              <td>No (Bitap)</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>TypeScript</td>
+              <td class="ms-table__highlight">Native</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Partial</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- USE CASES -->
+    <section class="ms-usecases" aria-label="Use cases">
+      <h2 class="ms-section-title">Use Cases</h2>
+      <div class="ms-usecase-grid">
+        <div class="ms-usecase-card">
+          <h3>Documentation Search</h3>
+          <p>Powers VitePress and Docusaurus. Build-time index, instant search, offline-capable.</p>
+        </div>
+        <div class="ms-usecase-card">
+          <h3>Autocomplete</h3>
+          <p>Real-time suggestions in form fields. Prefix search + autoSuggest without server calls.</p>
+        </div>
+        <div class="ms-usecase-card">
+          <h3>Client-side Filtering</h3>
+          <p>Replace simple string matching in data tables with relevance-ranked, typo-tolerant filtering.</p>
+        </div>
+        <div class="ms-usecase-card">
+          <h3>Offline / PWA</h3>
+          <p>No network needed. Index data once, search locally without connectivity.</p>
+        </div>
+        <div class="ms-usecase-card">
+          <h3>Rapid Prototyping</h3>
+          <p>Skip Elasticsearch setup. Drop in MiniSearch for instant full-text search in any prototype.</p>
+        </div>
+        <div class="ms-usecase-card">
+          <h3>E-commerce</h3>
+          <p>Fast, typo-tolerant product search with field boosting for names and brands.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <footer class="ms-footer">
+      <h2 class="ms-section-title">Get Started</h2>
+      <div class="ms-footer__install">
+        <code class="ms-footer__cmd">npm install minisearch</code>
+      </div>
+      <div class="ms-footer__links">
+        <a
+          href="https://github.com/lucaong/minisearch"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="ms-btn ms-btn--primary"
+        >GitHub Repository</a>
+        <a
+          href="https://lucaong.github.io/minisearch/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="ms-btn ms-btn--secondary"
+        >Documentation</a>
+      </div>
+    </footer>
+
+  }
+
+</div>

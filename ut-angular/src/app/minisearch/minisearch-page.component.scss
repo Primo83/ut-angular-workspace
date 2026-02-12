@@ -1,0 +1,704 @@
+// ──────────────────────────────────────────────
+//  MiniSearch Showcase – Component Styles (SCSS)
+// ──────────────────────────────────────────────
+
+// ── Design Tokens ──
+$color-bg: #0f1117;
+$color-surface: #1a1d27;
+$color-surface-hover: #22263a;
+$color-border: #2a2e3f;
+$color-text: #e4e5ea;
+$color-text-muted: #8b8fa3;
+$color-accent: #6366f1;
+$color-accent-hover: #818cf8;
+$color-accent-bg: rgba(99, 102, 241, 0.12);
+$color-mark: rgba(250, 204, 21, 0.35);
+$color-success: #22c55e;
+$color-error: #ef4444;
+$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+$radius-sm: 6px;
+$radius-md: 10px;
+$radius-lg: 16px;
+
+// Category colors
+$cat-concepts: #6366f1;
+$cat-api: #22d3ee;
+$cat-examples: #a78bfa;
+$cat-use-cases: #f472b6;
+
+:host {
+  display: block;
+  background: $color-bg;
+  color: $color-text;
+  font-family: $font-sans;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// ── Page container ──
+.ms-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+// ── HERO ──
+.ms-hero {
+  text-align: center;
+  padding: 4rem 0 3rem;
+
+  &__badge {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: $color-accent;
+    background: $color-accent-bg;
+    padding: 0.35rem 1rem;
+    border-radius: 999px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  &__title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    margin: 0 0 1rem;
+    background: linear-gradient(135deg, $color-accent, $color-accent-hover, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  &__subtitle {
+    font-size: 1.15rem;
+    color: $color-text-muted;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+  }
+
+  &__stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+}
+
+.ms-stat {
+  font-size: 0.875rem;
+  color: $color-text-muted;
+
+  strong {
+    color: $color-text;
+    font-weight: 600;
+  }
+}
+
+// ── STATUS (loading / error) ──
+.ms-status {
+  text-align: center;
+  padding: 4rem 1rem;
+
+  p {
+    color: $color-text-muted;
+    margin-top: 1rem;
+  }
+
+  &--error {
+    .ms-status__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba($color-error, 0.15);
+      color: $color-error;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+  }
+}
+
+.ms-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid $color-border;
+  border-top-color: $color-accent;
+  border-radius: 50%;
+  margin: 0 auto;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// ── SECTION titles ──
+.ms-section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+}
+
+.ms-section-desc {
+  color: $color-text-muted;
+  margin: 0 0 1.75rem;
+  line-height: 1.5;
+}
+
+// ── PLAYGROUND ──
+.ms-playground {
+  margin-bottom: 4rem;
+}
+
+// Search bar
+.ms-search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: 0 1rem;
+  transition: border-color 0.2s;
+
+  &:focus-within {
+    border-color: $color-accent;
+    box-shadow: 0 0 0 3px $color-accent-bg;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    color: $color-text-muted;
+  }
+
+  &__input {
+    flex: 1;
+    background: none;
+    border: none;
+    color: $color-text;
+    font-family: $font-sans;
+    font-size: 1rem;
+    padding: 0.85rem 0.75rem;
+    outline: none;
+    width: 100%;
+
+    &::placeholder {
+      color: $color-text-muted;
+    }
+  }
+
+  &__clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: $color-text-muted;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+
+    &:hover {
+      color: $color-text;
+      background: $color-surface-hover;
+    }
+  }
+}
+
+// Controls
+.ms-controls {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.ms-toggle {
+  font-family: $font-sans;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  background: $color-surface;
+  color: $color-text-muted;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    border-color: $color-accent;
+    color: $color-text;
+  }
+
+  &--active {
+    background: $color-accent-bg;
+    border-color: $color-accent;
+    color: $color-accent;
+  }
+}
+
+// Filters
+.ms-filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.ms-filter-chip {
+  font-family: $font-sans;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid $color-border;
+  border-radius: 999px;
+  background: transparent;
+  color: $color-text-muted;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    border-color: $color-text-muted;
+    color: $color-text;
+  }
+
+  &--active {
+    background: $color-accent-bg;
+    border-color: $color-accent;
+    color: $color-accent;
+  }
+
+  &__count {
+    font-size: 0.7rem;
+    margin-left: 0.25rem;
+    opacity: 0.7;
+  }
+}
+
+// Suggestions
+.ms-suggestions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+
+  &__label {
+    font-size: 0.75rem;
+    color: $color-text-muted;
+  }
+}
+
+.ms-suggestion-chip {
+  font-family: $font-sans;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid $color-border;
+  background: transparent;
+  color: $color-text-muted;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    background: $color-accent-bg;
+    border-color: $color-accent;
+    color: $color-accent;
+  }
+}
+
+// Meta
+.ms-meta {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: $color-text-muted;
+
+  &__dot {
+    margin: 0 0.4rem;
+  }
+}
+
+// Results
+.ms-results {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ms-result {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: 1rem 1.25rem;
+  transition: border-color 0.15s;
+
+  &:hover {
+    border-color: $color-accent;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+  }
+
+  &__category {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.2rem 0.5rem;
+    border-radius: $radius-sm;
+
+    &--concepts {
+      background: rgba($cat-concepts, 0.15);
+      color: $cat-concepts;
+    }
+
+    &--api {
+      background: rgba($cat-api, 0.15);
+      color: $cat-api;
+    }
+
+    &--examples {
+      background: rgba($cat-examples, 0.15);
+      color: $cat-examples;
+    }
+
+    &--use-cases {
+      background: rgba($cat-use-cases, 0.15);
+      color: $cat-use-cases;
+    }
+  }
+
+  &__score {
+    font-family: $font-mono;
+    font-size: 0.75rem;
+    color: $color-text-muted;
+  }
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 0.35rem;
+    line-height: 1.4;
+
+    ::ng-deep mark {
+      background: $color-mark;
+      color: inherit;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+  }
+
+  &__text {
+    font-size: 0.875rem;
+    color: $color-text-muted;
+    line-height: 1.55;
+    margin: 0;
+
+    ::ng-deep mark {
+      background: $color-mark;
+      color: inherit;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.6rem;
+  }
+}
+
+.ms-tag {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: $radius-sm;
+  background: $color-surface-hover;
+  color: $color-text-muted;
+}
+
+// Empty state
+.ms-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+
+  &__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+  }
+
+  &__hint {
+    color: $color-text-muted;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+}
+
+// ── DOCUMENTATION / SNIPPETS ──
+.ms-docs {
+  margin-bottom: 4rem;
+}
+
+.ms-snippets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.ms-snippet {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid $color-border;
+  }
+
+  &__title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  &__copy {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: $font-sans;
+    font-size: 0.75rem;
+    background: none;
+    border: none;
+    color: $color-text-muted;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: $radius-sm;
+    transition: all 0.15s;
+
+    &:hover {
+      background: $color-surface-hover;
+      color: $color-text;
+    }
+  }
+
+  &__code {
+    margin: 0;
+    padding: 1rem;
+    font-family: $font-mono;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    color: $color-text-muted;
+
+    code {
+      font-family: inherit;
+    }
+  }
+}
+
+// ── COMPARISON TABLE ──
+.ms-comparison {
+  margin-bottom: 4rem;
+}
+
+.ms-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+}
+
+.ms-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+
+  th,
+  td {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid $color-border;
+  }
+
+  th {
+    font-weight: 600;
+    background: $color-surface;
+    white-space: nowrap;
+  }
+
+  td {
+    color: $color-text-muted;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr:hover td {
+    background: $color-surface-hover;
+  }
+
+  &__highlight {
+    background: $color-accent-bg !important;
+    color: $color-accent !important;
+    font-weight: 600;
+  }
+}
+
+// ── USE CASES ──
+.ms-usecases {
+  margin-bottom: 4rem;
+}
+
+.ms-usecase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.ms-usecase-card {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: 1.25rem;
+  transition: border-color 0.15s, transform 0.15s;
+
+  &:hover {
+    border-color: $color-accent;
+    transform: translateY(-2px);
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+  }
+
+  p {
+    font-size: 0.85rem;
+    color: $color-text-muted;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+// ── FOOTER / CTA ──
+.ms-footer {
+  text-align: center;
+  padding: 3rem 0;
+  border-top: 1px solid $color-border;
+
+  &__install {
+    margin: 1.5rem 0;
+  }
+
+  &__cmd {
+    font-family: $font-mono;
+    font-size: 1rem;
+    background: $color-surface;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    padding: 0.75rem 1.5rem;
+    color: $color-accent;
+    user-select: all;
+  }
+
+  &__links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+}
+
+// ── BUTTONS ──
+.ms-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-sans;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.65rem 1.5rem;
+  border-radius: $radius-md;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s;
+
+  &--primary {
+    background: $color-accent;
+    color: #fff;
+
+    &:hover {
+      background: $color-accent-hover;
+    }
+  }
+
+  &--secondary {
+    background: transparent;
+    border-color: $color-border;
+    color: $color-text;
+
+    &:hover {
+      border-color: $color-accent;
+      color: $color-accent;
+    }
+  }
+}
+
+// ── Focus Visible (a11y) ──
+.ms-toggle,
+.ms-filter-chip,
+.ms-suggestion-chip,
+.ms-snippet__copy,
+.ms-btn,
+.ms-search-bar__clear {
+  &:focus-visible {
+    outline: 2px solid $color-accent;
+    outline-offset: 2px;
+  }
+}
+
+// ── Responsive ──
+@media (max-width: 640px) {
+  .ms-page {
+    padding: 1rem 1rem 3rem;
+  }
+
+  .ms-hero {
+    padding: 2rem 0 1.5rem;
+
+    &__stats {
+      gap: 1rem;
+    }
+  }
+
+  .ms-snippets {
+    grid-template-columns: 1fr;
+  }
+
+  .ms-usecase-grid {
+    grid-template-columns: 1fr;
+  }
+}
