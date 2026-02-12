@@ -15,9 +15,10 @@
 # Done:
 - 2026-02-12 13:47:30 Sprawdzono, że katalog nie jest repozytorium Git oraz że brak `README.md` i `.gitignore`.
 - 2026-02-12 13:47:54 Utworzono `README.md`, `.gitignore`, zainicjalizowano repo Git, wykonano commit i wypchnięto `main` do `origin`.
+- 2026-02-12 13:48:17 Zacommitowano i wypchnięto aktualizację `CONTINUITY.md`.
 
 # Now:
-- 2026-02-12 13:47:54 Weryfikacja stanu po push (remote, branch, clean working tree).
+- 2026-02-12 13:48:17 Stan repo czysty; `main` śledzi `origin/main`.
 
 # Next:
 - Upewnić się, że `/.env.test-accounts` nie jest śledzony oraz że `origin`/`main` są poprawnie ustawione.
