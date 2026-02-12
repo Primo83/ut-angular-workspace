@@ -31,55 +31,17 @@
     @if (svc.state().status === 'ready' || svc.state().status === 'error') {
       <div class="ms-hero__offline">
         @if (svc.offlineMode()) {
-          <button class="ms-btn ms-btn--secondary ms-btn--sm" (click)="switchToOnline()" title="Przełącz na dane z serwera.">
+          <button class="ms-btn ms-btn--secondary ms-btn--sm" (click)="switchToOnline()" data-tooltip="Wraca do pobierania danych z internetu. Wyszukiwarka przebuduje swoją bazę na podstawie najnowszych danych z serwera. Kliknij, jeśli wcześniej pracowałeś bez połączenia i chcesz wrócić do aktualnych danych.">
             Przełącz na tryb online
           </button>
         } @else {
-          <button class="ms-btn ms-btn--secondary ms-btn--sm" (click)="switchToOffline()" title="Załaduj wbudowany zestaw danych — wyszukiwanie działa bez serwera i sieci.">
+          <button class="ms-btn ms-btn--secondary ms-btn--sm" (click)="switchToOffline()" data-tooltip="Przełącza wyszukiwarkę na dane zapisane w samej aplikacji — nie potrzebujesz internetu ani serwera. Idealne do prezentacji, pokazów i sytuacji, gdy sieć jest niedostępna.">
             Tryb offline (bez serwera)
           </button>
         }
       </div>
     }
   </header>
-
-  <section class="ms-custom-note" aria-label="Customowe rozwiązania">
-    <h2 class="ms-custom-note__title">Nasze customowe rozwiązania</h2>
-    <p class="ms-custom-note__desc">
-      Ten demo-page nie pokazuje tylko "gołego" MiniSearch. Dodaliśmy własne warstwy UX:
-      podświetlenia mocy dopasowania oraz klikalne przejścia do dokumentacji.
-    </p>
-    <ul class="ms-custom-note__list">
-      <li>
-        <strong>Custom highlight exact/fuzzy:</strong>
-        wpisz <code>angular</code>, aby zobaczyć mocne dopasowanie (<em>exact</em>, zielony akcent),
-        a następnie <code>anglar</code>, aby zobaczyć dopasowanie rozmyte (<em>fuzzy</em>, beżowy akcent).
-      </li>
-      <li>
-        <strong>Klikalne linki:</strong>
-        każdy wynik ma link „Otwórz dokument”, a każdy smaczek w „Szybkiej ściądze”
-        prowadzi bezpośrednio do odpowiedniego fragmentu dokumentacji.
-      </li>
-    </ul>
-    <p class="ms-custom-note__source">
-      Inspiracja: <code>src/app/shared/floating-toc/floating-toc.component.ts</code>
-    </p>
-    <ul class="ms-custom-note__func-list">
-      <li><code>buildSearchIndex(...)</code> — buduje indeks wyszukiwania z danych wejściowych.</li>
-      <li><code>toSearchResult(...)</code> — mapuje surowy wynik MiniSearch na model używany przez UI.</li>
-      <li><code>buildSnippet(...)</code> — wycina krótki fragment tekstu wokół dopasowania.</li>
-      <li><code>stripHtml(...)</code> — czyści HTML do czystego tekstu.</li>
-      <li><code>normalize(...)</code> — normalizuje tekst: małe litery + usuwanie diakrytyków.</li>
-      <li><code>tokens(...)</code> — rozbija tekst na tokeny do wyszukiwania.</li>
-      <li><code>ngramsFor(...)</code> — tworzy n-gramy pomagające przy dopasowaniach cząstkowych.</li>
-      <li><code>buildNgramsField(...)</code> — łączy n-gramy z wielu źródeł w jedno pole indeksu.</li>
-      <li><code>getStepContentPlainText(...)</code> — przygotowuje czystą treść kroku do indeksowania.</li>
-      <li>
-        <code>buildSectionFreshness(...)</code> + <code>evaluateStepFreshness(...)</code> —
-        liczy „świeżość” (NEW/RECENT/UPDATED), która wpływa na budowę dokumentów i prezentację wyników.
-      </li>
-    </ul>
-  </section>
 
   <!-- LOADING STATE -->
   @if (svc.state().status === 'loading') {
@@ -95,7 +57,7 @@
       <span class="ms-status__icon">!</span>
       <p>{{ svc.state().error }}</p>
       <button class="ms-btn ms-btn--primary" (click)="svc.loadAndIndex()">Ponów</button>
-      <button class="ms-btn ms-btn--secondary" (click)="switchToOffline()" style="margin-left: 0.5rem" title="Załaduj wbudowane dane offline — nie wymaga połączenia z serwerem.">
+      <button class="ms-btn ms-btn--secondary" (click)="switchToOffline()" style="margin-left: 0.5rem" data-tooltip="Serwer nie odpowiada? Nie szkodzi — możesz przełączyć się na dane zapisane w aplikacji i dalej korzystać z wyszukiwarki. Wszystko zadziała bez internetu.">
         Użyj danych offline
       </button>
     </section>
@@ -124,7 +86,7 @@
           aria-label="Wyszukiwanie w dokumentacji MiniSearch"
         />
         @if (queryInput) {
-          <button class="ms-search-bar__clear" (click)="clearSearch()" aria-label="Wyczyść wyszukiwanie" title="Wyczyść pole wyszukiwania i zresetuj wyniki.">
+          <button class="ms-search-bar__clear" (click)="clearSearch()" aria-label="Wyczyść wyszukiwanie" data-tooltip="Kasuje wpisany tekst i chowa wyniki. Pole wyszukiwania zostaje aktywne, więc możesz od razu wpisać coś nowego.">
             <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
           </button>
         }
@@ -142,28 +104,28 @@
           [class.ms-toggle--active]="svc.options().prefix"
           (click)="toggleOption('prefix')"
           [attr.aria-pressed]="svc.options().prefix"
-          title="Dopasowuje słowa zaczynające się od wpisanego fragmentu. Włącz, żeby szukać w stylu autouzupełniania."
+          data-tooltip="Wpisz początek słowa, a wyszukiwarka znajdzie wszystkie pasujące hasła. Na przykład wpisanie 'ang' znajdzie 'angular', 'angielski' itp. Działa jak podpowiadanie w Google."
         >Prefix</button>
         <button
           class="ms-toggle"
           [class.ms-toggle--active]="svc.options().fuzzy"
           (click)="toggleOption('fuzzy')"
           [attr.aria-pressed]="svc.options().fuzzy"
-          title="Znajduje wyniki nawet przy literówkach. Przydatne, gdy użytkownicy piszą szybko."
+          data-tooltip="Toleruje literówki i drobne błędy w pisowni. Jeśli wpiszesz 'anglar' zamiast 'angular', wyszukiwarka i tak znajdzie właściwe wyniki."
         >Fuzzy</button>
         <button
           class="ms-toggle"
           [class.ms-toggle--active]="svc.options().boost"
           (click)="toggleOption('boost')"
           [attr.aria-pressed]="svc.options().boost"
-          title="Nadaje dodatkową wagę dopasowaniom w tytule. Wyniki z szukanym słowem w tytule pojawiają się wyżej."
+          data-tooltip="Wyniki, w których szukane słowo pojawia się w tytule, zostaną pokazane wyżej na liście. Przydatne, gdy chcesz najpierw zobaczyć najważniejsze trafienia."
         >Wzmocnij tytuł</button>
         <button
           class="ms-toggle"
           [class.ms-toggle--active]="svc.options().combineWith !== 'OR'"
           (click)="toggleCombine()"
           [attr.aria-pressed]="svc.options().combineWith !== 'OR'"
-          [title]="getCombineTooltip()"
+          [attr.data-tooltip]="getCombineTooltip()"
         >{{ getCombineLabel() }}</button>
       </div>
 
@@ -174,7 +136,7 @@
           [class.ms-filter-chip--active]="svc.options().categoryFilter === null"
           [attr.aria-pressed]="svc.options().categoryFilter === null"
           (click)="setCategoryFilter(null)"
-          title="Pokaż wyniki ze wszystkich kategorii."
+          data-tooltip="Wyłącza filtrowanie po kategoriach — widzisz pełną listę wyników ze wszystkich działów dokumentacji. Dobry punkt startowy, zanim zawęzisz wyniki."
         >Wszystko</button>
         @for (cat of svc.categories(); track cat) {
           <button
@@ -182,7 +144,7 @@
             [class.ms-filter-chip--active]="svc.options().categoryFilter === cat"
             [attr.aria-pressed]="svc.options().categoryFilter === cat"
             (click)="setCategoryFilter(cat)"
-            title="Filtruj wyniki, aby pokazać tylko tę kategorię."
+            data-tooltip="Zawęża wyniki tylko do tej jednej kategorii. Reszta zostaje ukryta."
           >
             {{ getCategoryLabel(cat) }}
             @if (svc.facetCounts()[cat]; as count) {
@@ -206,7 +168,7 @@
               <div class="ms-advanced__chips">
                 @for (field of availableFields; track field) {
                   <button class="ms-toggle" [class.ms-toggle--active]="isFieldSelected(field)" (click)="toggleField(field)"
-                    title="Ogranicz wyszukiwanie tylko do tego pola.">
+                    data-tooltip="Ogranicza wyszukiwanie do tego jednego pola. Na przykład: zaznacz 'title', żeby szukać tylko w tytułach dokumentów, a nie w ich treści.">
                     {{ field }}
                   </button>
                 }
@@ -220,12 +182,12 @@
               <div class="ms-advanced__chips">
                 <button class="ms-toggle" [class.ms-toggle--active]="svc.options().perTermPrefix" (click)="toggleOption('perTermPrefix')"
                   [attr.aria-pressed]="svc.options().perTermPrefix"
-                  title="Prefix tylko dla ostatniego słowa — typowe autouzupełnianie.">
+                  data-tooltip="Tryb autouzupełniania tylko dla ostatniego wpisanego słowa. Wcześniejsze słowa muszą pasować dokładnie, ale ostatnie jest uzupełniane automatycznie — tak jak w wyszukiwarce Google.">
                   Prefix per-term
                 </button>
                 <button class="ms-toggle" [class.ms-toggle--active]="svc.options().perTermFuzzy" (click)="toggleOption('perTermFuzzy')"
                   [attr.aria-pressed]="svc.options().perTermFuzzy"
-                  title="Rozmycie tylko dla słów dłuższych niż 3 znaki.">
+                  data-tooltip="Toleruje literówki, ale tylko w dłuższych słowach (powyżej 3 znaków). Krótkie słowa muszą być wpisane dokładnie, bo przy nich nawet mała zmiana drastycznie zmienia znaczenie.">
                   Fuzzy per-term
                 </button>
               </div>
@@ -237,7 +199,7 @@
               <div class="ms-advanced__slider-row">
                 <input type="range" min="1" max="10" step="1" [value]="svc.options().maxFuzzy"
                   (input)="onNumberChange('maxFuzzy', $any($event.target).value)"
-                  title="Maksymalna liczba zmian tolerowanych przy wyszukiwaniu rozmytym." />
+                  data-tooltip="Ile liter może się różnić od oryginału, żeby wyszukiwarka wciąż uznała słowo za trafienie. Wyższa wartość = większa tolerancja na błędy, ale też więcej przypadkowych wyników." />
                 <span class="ms-advanced__value">{{ svc.options().maxFuzzy }}</span>
               </div>
             </div>
@@ -247,7 +209,7 @@
               <h4>Wzmocnienie słowa</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().boostTermEnabled" (click)="toggleOption('boostTermEnabled')"
                 [attr.aria-pressed]="svc.options().boostTermEnabled"
-                title="Dodaje dodatkową wagę do wybranego słowa z zapytania.">
+                data-tooltip="Pozwala wskazać jedno konkretne słowo z zapytania, które ma być ważniejsze od pozostałych. Wyniki z tym słowem pojawią się wyżej na liście.">
                 Włącz
               </button>
               @if (svc.options().boostTermEnabled) {
@@ -270,7 +232,7 @@
               <h4>Wzmocnienie dokumentów wg kategorii</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().boostDocumentEnabled" (click)="toggleOption('boostDocumentEnabled')"
                 [attr.aria-pressed]="svc.options().boostDocumentEnabled"
-                title="Podnosi pozycję dokumentów z wybranej kategorii w wynikach.">
+                data-tooltip="Sztucznie podnosi pozycję dokumentów z wybranej kategorii. Na przykład: jeśli wybierzesz 'Pojęcia', to wyniki z tej kategorii pojawią się wyżej, nawet jeśli inne wyniki lepiej pasują do zapytania.">
                 Włącz
               </button>
               @if (svc.options().boostDocumentEnabled) {
@@ -299,14 +261,14 @@
                 <label for="adv-fuzzy-weight">Fuzzy:</label>
                 <input id="adv-fuzzy-weight" type="range" min="0" max="1" step="0.05" [value]="svc.options().fuzzyWeight"
                   (input)="onSliderChange('fuzzyWeight', $any($event.target).value)"
-                  title="Waga wyników z dopasowania rozmytego w rankingu." />
+                  data-tooltip="Jak ważne są wyniki znalezione dzięki tolerancji literówek. Wartość bliżej 0 = wyniki z literówkami schodzą niżej. Wartość bliżej 1 = są tak samo ważne jak dokładne trafienia." />
                 <span class="ms-advanced__value">{{ svc.options().fuzzyWeight }}</span>
               </div>
               <div class="ms-advanced__slider-row">
                 <label for="adv-prefix-weight">Prefix:</label>
                 <input id="adv-prefix-weight" type="range" min="0" max="1" step="0.05" [value]="svc.options().prefixWeight"
                   (input)="onSliderChange('prefixWeight', $any($event.target).value)"
-                  title="Waga wyników z dopasowania prefiksowego w rankingu." />
+                  data-tooltip="Jak ważne są wyniki znalezione dzięki dopasowaniu początku słowa. Wartość bliżej 0 = te wyniki schodzą niżej. Wartość bliżej 1 = są tak samo ważne jak pełne dopasowania." />
                 <span class="ms-advanced__value">{{ svc.options().prefixWeight }}</span>
               </div>
             </div>
@@ -319,21 +281,21 @@
                 <label for="adv-bm25k">k (nasycenie):</label>
                 <input id="adv-bm25k" type="range" min="0.5" max="3" step="0.1" [value]="svc.options().bm25k"
                   (input)="onSliderChange('bm25k', $any($event.target).value)"
-                  title="Jak szybko powtórzenia słowa przestają podnosić wynik." />
+                  data-tooltip="Kontroluje, czy powtarzanie tego samego słowa w dokumencie wciąż podnosi jego pozycję. Niska wartość = jedno wystąpienie wystarczy. Wysoka = im więcej powtórzeń, tym lepiej." />
                 <span class="ms-advanced__value">{{ svc.options().bm25k }}</span>
               </div>
               <div class="ms-advanced__slider-row">
                 <label for="adv-bm25b">b (długość):</label>
                 <input id="adv-bm25b" type="range" min="0" max="1" step="0.05" [value]="svc.options().bm25b"
                   (input)="onSliderChange('bm25b', $any($event.target).value)"
-                  title="Jak mocno długość dokumentu wpływa na ranking." />
+                  data-tooltip="Czy długie dokumenty powinny być traktowane gorzej niż krótkie? Wartość 0 = długość nie ma znaczenia. Wartość 1 = krótkie dokumenty są mocno faworyzowane." />
                 <span class="ms-advanced__value">{{ svc.options().bm25b }}</span>
               </div>
               <div class="ms-advanced__slider-row">
                 <label for="adv-bm25d">d (minimum):</label>
                 <input id="adv-bm25d" type="range" min="0" max="1" step="0.05" [value]="svc.options().bm25d"
                   (input)="onSliderChange('bm25d', $any($event.target).value)"
-                  title="Dolna granica normalizacji długości. Zapobiega karaniu krótkich dokumentów." />
+                  data-tooltip="Minimalna granica, poniżej której krótkie dokumenty nie są już karane. Chroni bardzo krótkie teksty (np. jednozdaniowe) przed niesprawiedliwym obniżeniem pozycji." />
                 <span class="ms-advanced__value">{{ svc.options().bm25d }}</span>
               </div>
             </div>
@@ -345,7 +307,7 @@
                 <input type="text" class="ms-advanced__input" placeholder="Słowa do wykluczenia..."
                   [value]="svc.options().excludeTerms"
                   (input)="onTextChange('excludeTerms', $any($event.target).value)"
-                  title="Wpisz słowa, które mają być wykluczone z wyników." />
+                  data-tooltip="Wpisz słowa, których NIE chcesz widzieć w wynikach. Dokumenty zawierające te słowa zostaną ukryte. Oddzielaj słowa spacjami." />
                 <p class="ms-advanced__hint">Wyniki pasujące do tych słów zostaną odrzucone.</p>
               </div>
             }
@@ -355,7 +317,7 @@
               <h4>Zapytanie zagnieżdżone (query tree)</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().queryTreeEnabled" (click)="toggleOption('queryTreeEnabled')"
                 [attr.aria-pressed]="svc.options().queryTreeEnabled"
-                title="Łączy dwie grupy słów operatorem OR, a wewnątrz każdej grupy wymaga AND.">
+                data-tooltip="Pozwala stworzyć dwa zestawy słów kluczowych. Dokumenty muszą pasować do WSZYSTKICH słów w co najmniej jednym z zestawów. Na przykład: Grupa A 'angular framework' LUB Grupa B 'react library'.">
                 Włącz
               </button>
               @if (svc.options().queryTreeEnabled) {
@@ -383,7 +345,7 @@
               <h4>Wildcard (pokaż wszystko)</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().wildcardMode" (click)="toggleOption('wildcardMode')"
                 [attr.aria-pressed]="svc.options().wildcardMode"
-                title="Pokazuje wszystkie dokumenty w indeksie. Przydatne z filtrami, żeby przeglądać całą kolekcję.">
+                data-tooltip="Wyświetla WSZYSTKIE dokumenty w bazie, niezależnie od zapytania. Przydatne, gdy chcesz przejrzeć całą kolekcję lub użyć filtrów kategorii do przeglądania.">
                 Pokaż wszystko
               </button>
               <p class="ms-advanced__hint">Włącz, aby zobaczyć wszystkie dokumenty (MiniSearch.wildcard). Łącz z filtrami kategorii i ról.</p>
@@ -396,7 +358,7 @@
                 @for (fs of filterStrategies; track fs) {
                   <button class="ms-toggle" [class.ms-toggle--active]="svc.options().filterStrategy === fs"
                     (click)="onTextChange('filterStrategy', fs)"
-                    title="Zmień strategię filtrowania wyników.">
+                    data-tooltip="Wybiera dodatkowy warunek filtrowania wyników: brak dodatkowego filtra, filtr po minimalnej długości tekstu lub filtr po konkretnym tagu.">
                     {{ getFilterStrategyLabel(fs) }}
                   </button>
                 }
@@ -406,7 +368,7 @@
                   <label for="adv-filter-min-len">Min. znaków:</label>
                   <input id="adv-filter-min-len" type="range" min="10" max="200" step="10" [value]="svc.options().filterMinLength"
                     (input)="onNumberChange('filterMinLength', $any($event.target).value)"
-                    title="Pokaż tylko dokumenty, których tekst ma co najmniej tyle znaków." />
+                    data-tooltip="Ustawia minimalną długość tekstu dokumentu (w znakach). Dokumenty z krótszym tekstem zostaną ukryte. Przydatne, gdy chcesz odfiltrować niekompletne wpisy." />
                   <span class="ms-advanced__value">{{ svc.options().filterMinLength }}</span>
                 </div>
               }
@@ -414,7 +376,7 @@
                 <input type="text" class="ms-advanced__input" placeholder="Wpisz tag..."
                   [value]="svc.options().filterTag"
                   (input)="onTextChange('filterTag', $any($event.target).value)"
-                  title="Pokaż tylko dokumenty zawierające ten tag." />
+                  data-tooltip="Wpisz nazwę tagu — zostaną pokazane tylko dokumenty oznaczone tym tagiem. Tagi to etykiety przypisane do dokumentów, np. 'wydajność' lub 'początkujący'." />
               }
             </div>
 
@@ -425,12 +387,12 @@
                 @for (role of availableRoles; track role) {
                   <button class="ms-toggle" [class.ms-toggle--active]="svc.options().roleFilter === role"
                     (click)="onTextChange('roleFilter', role)"
-                    title="Filtruj wyniki według roli użytkownika. Admin widzi wszystko, Gość — bez dokumentacji API.">
+                    data-tooltip="Symuluje uprawnienia różnych użytkowników. 'Gość' nie widzi dokumentacji technicznej API. 'Admin' widzi absolutnie wszystko. 'Wszyscy' to widok domyślny.">
                     {{ getRoleLabel(role) }}
                   </button>
                 }
               </div>
-              <p class="ms-advanced__hint">Guest nie widzi kategorii „Dokumentacja API". Admin widzi wszystko.</p>
+              <p class="ms-advanced__hint">Guest nie widzi kategorii 'Dokumentacja API'. Admin widzi wszystko.</p>
             </div>
 
             <!-- Score explanation (ID-T 26) -->
@@ -438,7 +400,7 @@
               <h4>Wyjaśnienie punktacji</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().showScoreExplanation" (click)="toggleOption('showScoreExplanation')"
                 [attr.aria-pressed]="svc.options().showScoreExplanation"
-                title="Pokaż przy każdym wyniku, które słowa pasowały i w jakich polach.">
+                data-tooltip="Przy każdym wyniku pojawi się dodatkowa informacja: które słowa z Twojego zapytania zostały znalezione i w jakich częściach dokumentu (tytuł, treść, tagi).">
                 Pokaż szczegóły
               </button>
             </div>
@@ -449,23 +411,23 @@
               <div class="ms-advanced__chips">
                 <button class="ms-toggle" [class.ms-toggle--active]="svc.options().suggestPrefix" (click)="toggleOption('suggestPrefix')"
                   [attr.aria-pressed]="svc.options().suggestPrefix"
-                  title="Podpowiedzi dopasowują słowa zaczynające się od wpisanego fragmentu.">
+                  data-tooltip="Podpowiedzi będą szukać słów zaczynających się od wpisanego fragmentu. Wpisujesz 'ang'? Podpowiedzi zaproponują 'angular'.">
                   Prefix
                 </button>
                 <button class="ms-toggle" [class.ms-toggle--active]="svc.options().suggestFuzzy" (click)="toggleOption('suggestFuzzy')"
                   [attr.aria-pressed]="svc.options().suggestFuzzy"
-                  title="Podpowiedzi tolerują literówki — niezależnie od głównego ustawienia fuzzy.">
+                  data-tooltip="Podpowiedzi będą tolerować literówki — niezależnie od głównego ustawienia wyszukiwania. Wpisujesz 'anglar'? Podpowiedzi i tak zaproponują 'angular'.">
                   Fuzzy
                 </button>
                 <button class="ms-toggle" [class.ms-toggle--active]="svc.options().suggestFilterEnabled" (click)="toggleOption('suggestFilterEnabled')"
                   [attr.aria-pressed]="svc.options().suggestFilterEnabled"
-                  title="Podpowiedzi uwzględniają aktualny filtr kategorii.">
+                  data-tooltip="Podpowiedzi będą brały pod uwagę wybrany filtr kategorii. Jeśli filtrujesz po 'Pojęcia', podpowiedzi pokażą tylko hasła z tej kategorii.">
                   Filtr kategorii
                 </button>
                 <button class="ms-toggle" [class.ms-toggle--active]="svc.options().suggestCombineWith === 'AND'"
                   (click)="svc.updateOption('suggestCombineWith', svc.options().suggestCombineWith === 'OR' ? 'AND' : 'OR')"
                   [attr.aria-pressed]="svc.options().suggestCombineWith === 'AND'"
-                  title="Czy podpowiedzi wymagają wszystkich słów (AND) czy dowolnego (OR).">
+                  data-tooltip="Czy podpowiedzi mają wymagać WSZYSTKICH wpisanych słów (tryb AND), czy wystarczy jedno z nich (tryb OR). AND = węższe, celniejsze podpowiedzi. OR = szersze, więcej propozycji.">
                   {{ svc.options().suggestCombineWith }}
                 </button>
               </div>
@@ -483,10 +445,10 @@
               <h4>Zagnieżdżone pola (extractField nested)</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().extractNestedEnabled" (click)="toggleIndexOption('extractNestedEnabled')"
                 [attr.aria-pressed]="svc.options().extractNestedEnabled"
-                title="Dodaje pole metadata.author do indeksu. Pozwala wyszukiwać po autorze dokumentu.">
+                data-tooltip="Dodaje do wyszukiwarki pole 'autor dokumentu', które normalnie jest ukryte w strukturze danych. Po włączeniu możesz szukać dokumentów po nazwisku autora, np. 'Kowalski'.">
                 Włącz
               </button>
-              <p class="ms-advanced__hint">Indeksuje pole <code>metadata.author</code> — szukaj np. „Kowalski" lub „Nowak" (tryb offline).</p>
+              <p class="ms-advanced__hint">Indeksuje pole <code>metadata.author</code> — szukaj np. 'Kowalski' lub 'Nowak' (tryb offline).</p>
             </div>
 
             <!-- extractField derived (ID-T 31) -->
@@ -494,7 +456,7 @@
               <h4>Pola pochodne (extractField derived)</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().extractDerivedEnabled" (click)="toggleIndexOption('extractDerivedEnabled')"
                 [attr.aria-pressed]="svc.options().extractDerivedEnabled"
-                title="Tworzy wirtualne pole summary = tytuł + kategoria. Wyszukiwanie po nim łapie oba konteksty naraz.">
+                data-tooltip="Tworzy nowe pole łączące tytuł i kategorię dokumentu w jedno. Dzięki temu jedno wyszukanie może trafić jednocześnie w tytuł i w nazwę kategorii.">
                 Włącz
               </button>
               <p class="ms-advanced__hint">Pole <code>summary</code> = tytuł + kategoria — wyszukiwanie łączy oba konteksty.</p>
@@ -505,10 +467,10 @@
               <h4>Serializacja pól (stringifyField)</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().stringifyFieldEnabled" (click)="toggleIndexOption('stringifyFieldEnabled')"
                 [attr.aria-pressed]="svc.options().stringifyFieldEnabled"
-                title="Zmienia sposób zapisu tagów w indeksie: zamiast 'search fulltext' zapisuje 'concepts:search concepts:fulltext'. Pozwala szukać po kategorii:tagu.">
+                data-tooltip="Zmienia format zapisu tagów w wyszukiwarce. Zamiast zwykłego 'search' zapisuje 'concepts:search' — dzięki temu możesz szukać tagów w konkretnej kategorii.">
                 Włącz
               </button>
-              <p class="ms-advanced__hint">Tagi stają się <code>kategoria:tag</code> — szukaj np. „concepts:search" (tryb offline).</p>
+              <p class="ms-advanced__hint">Tagi stają się <code>kategoria:tag</code> — szukaj np. 'concepts:search' (tryb offline).</p>
             </div>
 
             <!-- custom tokenize (ID-T 33) -->
@@ -516,10 +478,10 @@
               <h4>Tokenizator niestandardowy</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().customTokenizeEnabled" (click)="toggleIndexOption('customTokenizeEnabled')"
                 [attr.aria-pressed]="svc.options().customTokenizeEnabled"
-                title="Dzieli tekst na słowa, rozbijając też camelCase i myślniki. 'MiniSearch' staje się 'mini' + 'search'.">
+                data-tooltip="Rozbija złożone nazwy na osobne słowa. Na przykład 'MiniSearch' staje się 'mini' + 'search', a 'auto-suggest' staje się 'auto' + 'suggest'. Ułatwia znajdowanie fragmentów nazw.">
                 CamelCase tokenizer
               </button>
-              <p class="ms-advanced__hint">Rozbija „MiniSearch" na „mini" + „search", „auto-suggest" na „auto" + „suggest".</p>
+              <p class="ms-advanced__hint">Rozbija 'MiniSearch' na 'mini' + 'search', 'auto-suggest' na 'auto' + 'suggest'.</p>
             </div>
 
             <!-- tokenize split index/search (ID-T 34) -->
@@ -527,7 +489,7 @@
               <h4>Osobne tokenizatory (index / search)</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().splitTokenizeEnabled" (click)="toggleIndexOption('splitTokenizeEnabled')"
                 [attr.aria-pressed]="svc.options().splitTokenizeEnabled"
-                title="Indeks: rozbija camelCase. Wyszukiwanie: standardowy podział po spacji. Inny tokenizer na wejściu i inny na wyjściu.">
+                data-tooltip="Używa różnych reguł dzielenia tekstu przy zapisie i przy wyszukiwaniu. Zapis: rozbija złożone nazwy typu MiniSearch. Wyszukiwanie: dzieli normalnie po spacjach.">
                 Włącz split tokenize
               </button>
               <p class="ms-advanced__hint">Indeks: CamelCase tokenizer. Wyszukiwanie: standardowy (po spacji). Dwa niezależne pipeline.</p>
@@ -538,10 +500,10 @@
               <h4>Normalizacja terminów</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().processTermNormEnabled" (click)="toggleIndexOption('processTermNormEnabled')"
                 [attr.aria-pressed]="svc.options().processTermNormEnabled"
-                title="Usuwa polskie znaki diakrytyczne: ą→a, ć→c, ę→e itd. Szukanie 'szukanie' trafi w 'wyszukiwanie'.">
+                data-tooltip="Ignoruje polskie ogonki i znaki specjalne. Po włączeniu nie musisz wpisywać ogonków — 'szukanie' i 'wyszukiwanie' będą traktowane tak samo. Wpisujesz bez ogonków? I tak znajdziesz właściwe wyniki.">
                 Normalizacja (diakrytyki)
               </button>
-              <p class="ms-advanced__hint">Zamienia ą→a, ć→c, ę→e itd. „wyszukiwanie" trafi na zapytanie „wyszukiwanie" i „wyszukiwanie".</p>
+              <p class="ms-advanced__hint">Zamienia ą→a, ć→c, ę→e itd. 'wyszukiwanie' trafi na zapytanie 'wyszukiwanie' i 'wyszukiwanie'.</p>
             </div>
 
             <!-- processTerm split index/search (ID-T 36) -->
@@ -549,7 +511,7 @@
               <h4>Osobne przetwarzanie (index / search)</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().splitProcessTermEnabled" (click)="toggleIndexOption('splitProcessTermEnabled')"
                 [attr.aria-pressed]="svc.options().splitProcessTermEnabled"
-                title="Indeks: normalizuje + lowercase. Wyszukiwanie: tylko lowercase (bez usuwania diakrytyków). Dwa osobne pipeline.">
+                data-tooltip="Przy zapisie do bazy: normalizuje tekst i zamienia na małe litery. Przy wyszukiwaniu: tylko zamienia na małe litery, bez usuwania ogonków. Dwa niezależne zestawy reguł.">
                 Włącz split processTerm
               </button>
               <p class="ms-advanced__hint">Indeks: normalizacja + lowercase. Search: tylko lowercase. Wymaga włączonej normalizacji.</p>
@@ -560,7 +522,7 @@
               <h4>Synonimy</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().synonymsEnabled" (click)="toggleIndexOption('synonymsEnabled')"
                 [attr.aria-pressed]="svc.options().synonymsEnabled"
-                title="Rozszerza terminy o synonimy przy indeksowaniu. 'js' staje się też 'javascript', 'frontend' → 'gui', 'ui'.">
+                data-tooltip="Automatycznie rozszerza słowa o ich odpowiedniki. Wpisujesz 'js'? Wyszukiwarka szuka też 'javascript'. 'Frontend'? Szuka też 'gui' i 'ui'. Więcej trafień bez dodatkowego wysiłku.">
                 Włącz synonimy
               </button>
               <p class="ms-advanced__hint">Przy indeksowaniu: js→javascript, ts→typescript, frontend→gui/ui, szukaj→wyszukaj/znajdz.</p>
@@ -571,7 +533,7 @@
               <h4>Stop-words (odrzucanie)</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().discardTermsEnabled" (click)="toggleIndexOption('discardTermsEnabled')"
                 [attr.aria-pressed]="svc.options().discardTermsEnabled"
-                title="Odrzuca popularne krótkie słowa (i, w, na, z, do, the, a, an…). Poprawia trafność wyników.">
+                data-tooltip="Ignoruje bardzo popularne, krótkie słowa, które nie niosą treści (np. 'i', 'w', 'na', 'the', 'a'). Bez nich wyniki wyszukiwania są celniejsze i mniej zaszumione.">
                 Włącz stop-words
               </button>
               <p class="ms-advanced__hint">Odrzuca: i, w, na, z, do, to, the, a, an, is… — poprawia trafność rankingu.</p>
@@ -582,10 +544,30 @@
               <h4>Niestandardowy identyfikator (idField)</h4>
               <button class="ms-toggle" [class.ms-toggle--active]="svc.options().customIdFieldEnabled" (click)="toggleIndexOption('customIdFieldEnabled')"
                 [attr.aria-pressed]="svc.options().customIdFieldEnabled"
-                title="Zamiast domyślnego pola 'id' używa 'docId' = 'doc-123'. Pokazuje, że MiniSearch nie wymusza nazwy identyfikatora.">
+                data-tooltip="Zmienia wewnętrzną nazwę identyfikatora dokumentu z 'id' na 'docId'. To demonstracja techniczna — pokazuje, że wyszukiwarka nie wymusza konkretnej nazwy pola identyfikatora.">
                 Użyj docId
               </button>
               <p class="ms-advanced__hint">Identyfikator: <code>docId</code> = <code>doc-&#123;id&#125;</code> zamiast standardowego <code>id</code>.</p>
+            </div>
+
+            <!-- N-gram tokenizer (ID-T 54) -->
+            <div class="ms-advanced__group">
+              <h4>N-gramy</h4>
+              <button class="ms-toggle" [class.ms-toggle--active]="svc.options().ngramEnabled" (click)="toggleIndexOption('ngramEnabled')"
+                [attr.aria-pressed]="svc.options().ngramEnabled"
+                data-tooltip="Rozbija każde słowo na krótkie fragmenty o ustalonej długości. Na przykład 'angular' (przy długości 3) daje: 'ang', 'ngu', 'gul', 'ula', 'lar'. Dzięki temu wyszukiwarka znajdzie wyniki nawet po wpisaniu środkowej części słowa — ale wyniki mogą być mniej precyzyjne.">
+                Włącz n-gramy
+              </button>
+              @if (svc.options().ngramEnabled) {
+                <div class="ms-advanced__slider-row">
+                  <label for="adv-ngram-size">Rozmiar n:</label>
+                  <input id="adv-ngram-size" type="range" min="2" max="5" step="1" [value]="svc.options().ngramSize"
+                    (input)="onNumberChange('ngramSize', $any($event.target).value); toggleIndexOption('ngramEnabled')"
+                    data-tooltip="Długość fragmentów, na które dzielone są słowa. Mniejsza liczba = więcej wyników (ale mniej precyzyjnych). Większa liczba = mniej wyników (ale bardziej trafnych)." />
+                  <span class="ms-advanced__value">{{ svc.options().ngramSize }}</span>
+                </div>
+              }
+              <p class="ms-advanced__hint">Rozbija 'angular' (n=3) na: 'ang', 'ngu', 'gul', 'ula', 'lar'. Nadpisuje inne tokenizery.</p>
             </div>
 
           </div>
@@ -600,7 +582,7 @@
             <button
               class="ms-suggestion-chip"
               (click)="onSuggestionClick(s.suggestion)"
-              title="Kliknij, żeby wyszukać to sugerowane hasło."
+              data-tooltip="Kliknij, żeby automatycznie wpisać to hasło w pole wyszukiwania i od razu zobaczyć wyniki."
             >{{ s.suggestion }}</button>
           }
         </div>
@@ -624,7 +606,7 @@
                 <span class="ms-result__category ms-result__category--{{ r.category }}">
                   {{ getCategoryLabel(r.category) }}
                 </span>
-                <span class="ms-result__score" [title]="'Trafność wyniku — punktacja: ' + r.score">
+                <span class="ms-result__score" [attr.data-tooltip]="'Wynik trafności: ' + formatScore(r.score) + '. Im wyższa liczba, tym lepiej dokument pasuje do Twojego zapytania.'">
                   {{ formatScore(r.score) }}
                 </span>
               </div>
@@ -636,7 +618,7 @@
                   [href]="r.url"
                   target="_blank"
                   rel="noopener noreferrer"
-                  title="Otwórz źródło tego dokumentu w nowej karcie."
+                  data-tooltip="Otwiera oryginalny dokument źródłowy w nowej karcie przeglądarki."
                 >
                   Otwórz dokument
                 </a>
@@ -705,10 +687,10 @@
           </div>
         </div>
         <div class="ms-live-form__actions">
-          <button class="ms-btn ms-btn--primary" (click)="addLiveDocument()" [disabled]="!liveDoc.title.trim()" title="Dodaje nowy dokument do indeksu. Staje się natychmiast wyszukiwalny — bez restartu.">
+          <button class="ms-btn ms-btn--primary" (click)="addLiveDocument()" [disabled]="!liveDoc.title.trim()" data-tooltip="Dodaje nowy dokument do bazy wyszukiwarki. Od razu po dodaniu możesz go znaleźć wyszukując — nie trzeba nic restartować ani przebudowywać.">
             Dodaj dokument
           </button>
-          <button class="ms-btn ms-btn--secondary" (click)="replaceLiveDocument()" [disabled]="!liveDoc.title.trim()" title="Zamienia istniejący dokument na zaktualizowaną wersję.">
+          <button class="ms-btn ms-btn--secondary" (click)="replaceLiveDocument()" [disabled]="!liveDoc.title.trim()" data-tooltip="Podmienia istniejący dokument (o tym samym numerze) na nową wersję. Stara treść znika, nowa od razu jest wyszukiwalna.">
             Zamień (po ID)
           </button>
         </div>
@@ -724,11 +706,11 @@
         <h3 class="ms-live-form__title">Operacje wsadowe</h3>
         <div class="ms-batch-ops__actions">
           <button class="ms-btn ms-btn--secondary" (click)="addBatchDocuments()"
-            title="Dodaje 5 przykładowych dokumentów jednym wywołaniem addAll(). Synchronicznie — cała paczka trafia do indeksu od razu.">
+            data-tooltip="Dodaje 5 przykładowych dokumentów za jednym razem. Wszystkie trafiają do wyszukiwarki natychmiast. Pokazuje, że można dodawać wiele dokumentów na raz.">
             Dodaj paczkę (addAll)
           </button>
           <button class="ms-btn ms-btn--secondary" (click)="addBatchDocumentsAsync()" [disabled]="svc.asyncProgress() !== null"
-            title="Generuje 100 dokumentów i dodaje je asynchronicznie w chunkach po 20. Nie blokuje UI — widać pasek postępu.">
+            data-tooltip="Generuje 100 dokumentów testowych i dodaje je w tle, paczkami po 20. Interfejs nie zamraża się — widać pasek postępu. Pokazuje, jak obsługiwać duże ilości danych.">
             Dodaj 100 async (addAllAsync)
           </button>
         </div>
@@ -748,9 +730,9 @@
             <label for="remove-id">remove(id)</label>
             <div class="ms-remove-ops__input-group">
               <input id="remove-id" type="number" placeholder="ID dokumentu..." [(ngModel)]="removeDocId"
-                title="Podaj ID dokumentu do usunięcia. remove() natychmiast czyści wpis z indeksu." />
+                data-tooltip="Wpisz numer dokumentu, który chcesz trwale usunąć z wyszukiwarki." />
               <button class="ms-btn ms-btn--secondary ms-btn--sm" (click)="removeLiveDocument()" [disabled]="!removeDocId"
-                title="Usuwa dokument z indeksu natychmiastowo. Wpis znika od razu — nie wymaga vacuum.">
+                data-tooltip="Trwale i natychmiast usuwa dokument z wyszukiwarki. Efekt widoczny od razu — dokument znika z wyników.">
                 Usuń
               </button>
             </div>
@@ -760,20 +742,20 @@
             <label for="discard-id">discard(id)</label>
             <div class="ms-remove-ops__input-group">
               <input id="discard-id" type="number" placeholder="ID dokumentu..." [(ngModel)]="discardDocId"
-                title="Podaj ID dokumentu do odrzucenia. discard() oznacza wpis jako usunięty, ale nie czyści pamięci — potrzebny vacuum." />
+                data-tooltip="Wpisz numer dokumentu, który chcesz oznaczyć do usunięcia. Dokument zniknie z wyników, ale pamięć zostanie zwolniona dopiero po kliknięciu 'Porządkuj'." />
               <button class="ms-btn ms-btn--secondary ms-btn--sm" (click)="discardLiveDocument()" [disabled]="!discardDocId"
-                title="Leniwe usuwanie — wpis jest oznaczony, ale fizycznie zostaje do wywołania vacuum. Szybsze od remove().">
+                data-tooltip="Szybkie usunięcie — dokument od razu znika z wyników wyszukiwania, ale fizycznie zajmuje miejsce do momentu kliknięcia 'Porządkuj'. Szybsze niż pełne usunięcie powyżej.">
                 Odrzuć
               </button>
             </div>
-            <p class="ms-advanced__hint">Leniwe usuwanie — szybsze, ale wymaga vacuum do zwolnienia pamięci. Obserwuj metryki „brudnych wpisów".</p>
+            <p class="ms-advanced__hint">Leniwe usuwanie — szybsze, ale wymaga vacuum do zwolnienia pamięci. Obserwuj metryki 'brudnych wpisów'.</p>
           </div>
         </div>
         <!-- ID-T 44: discardAll -->
         <div class="ms-remove-ops__discard-all">
           @if (!showDiscardAllConfirm()) {
             <button class="ms-btn ms-btn--secondary" (click)="confirmDiscardAll()"
-              title="Odrzuca WSZYSTKIE dokumenty z indeksu (discardAll). Wymaga potwierdzenia.">
+              data-tooltip="Oznacza WSZYSTKIE dokumenty w bazie do usunięcia. Uwaga: wymaga potwierdzenia. Po kliknięciu 'Porządkuj' pamięć zostanie zwolniona.">
               Odrzuć wszystkie (discardAll)
             </button>
           } @else {
@@ -788,23 +770,23 @@
 
       <!-- Index Metrics -->
       <div class="ms-live-metrics">
-        <div class="ms-live-metric" title="Łączna liczba dokumentów w indeksie wyszukiwania.">
+        <div class="ms-live-metric" data-tooltip="Ile dokumentów jest aktualnie w bazie wyszukiwarki. Rośnie po dodaniu, maleje po usunięciu.">
           <span class="ms-live-metric__value">{{ svc.documentCount() }}</span>
           <span class="ms-live-metric__label">Dokumenty</span>
         </div>
-        <div class="ms-live-metric" title="Łączna liczba unikalnych słów, które silnik zna.">
+        <div class="ms-live-metric" data-tooltip="Ile różnych, unikalnych słów zna wyszukiwarka. Im więcej dokumentów, tym więcej znanych słów.">
           <span class="ms-live-metric__value">{{ svc.getTermCount() }}</span>
           <span class="ms-live-metric__label">Unikalne terminy</span>
         </div>
-        <div class="ms-live-metric" title="Ile usuniętych wpisów wciąż zajmuje miejsce w indeksie.">
+        <div class="ms-live-metric" data-tooltip="Ile 'odrzuconych' dokumentów wciąż zajmuje miejsce w pamięci. Kliknij 'Porządkuj', żeby je wyczyścić.">
           <span class="ms-live-metric__value">{{ svc.getDirtCount() }}</span>
           <span class="ms-live-metric__label">Brudne wpisy</span>
         </div>
-        <div class="ms-live-metric" title="Proporcja usuniętych wpisów do całości. Bliżej 0 = indeks jest czysty.">
+        <div class="ms-live-metric" data-tooltip="Procent 'śmieci' w bazie. 0% = baza jest czysta. Im wyższy procent, tym więcej pamięci marnuje się na usunięte dane. Kliknij 'Porządkuj', żeby oczyścić.">
           <span class="ms-live-metric__value">{{ formatDirtFactor(svc.getDirtFactor()) }}</span>
           <span class="ms-live-metric__label">Współczynnik brudu</span>
         </div>
-        <button class="ms-btn ms-btn--secondary ms-live-metrics__vacuum" (click)="vacuumIndex()" title="Sprząta pozostałości po usuniętych dokumentach. Zwalnia pamięć i utrzymuje indeks w dobrej formie.">
+        <button class="ms-btn ms-btn--secondary ms-live-metrics__vacuum" (click)="vacuumIndex()" data-tooltip="Sprzątanie — zwalnia pamięć zajmowaną przez usunięte dokumenty i utrzymuje wyszukiwarkę w dobrej formie. Kliknij po usunięciu wielu dokumentów.">
           Porządkuj
         </button>
       </div>
@@ -817,15 +799,15 @@
         </p>
         <div class="ms-snapshot-panel__actions">
           <button class="ms-btn ms-btn--primary ms-btn--sm" (click)="saveSnapshot()"
-            title="Serializuje cały indeks do JSON (toJSON / JSON.stringify). Można go przechować w localStorage lub przesłać na serwer.">
+            data-tooltip="Zapisuje kopię całej bazy wyszukiwarki jako tekst. Tę kopię można potem wczytać z powrotem bez ponownego indeksowania — jak zapis stanu gry.">
             Zapisz (toJSON)
           </button>
           <button class="ms-btn ms-btn--secondary ms-btn--sm" (click)="loadSnapshot()" [disabled]="!svc.snapshotJson()"
-            title="Odtwarza indeks synchronicznie z zapisanego JSON-a (MiniSearch.loadJSON). Nie wymaga ponownego dodawania dokumentów.">
+            data-tooltip="Wczytuje zapisaną kopię bazy i odtwarza wyszukiwarkę bez ponownego dodawania dokumentów. Szybki powrót do wcześniejszego stanu.">
             Wczytaj (loadJSON)
           </button>
           <button class="ms-btn ms-btn--secondary ms-btn--sm" (click)="loadSnapshotAsync()" [disabled]="!svc.snapshotJson()"
-            title="Odtwarza indeks asynchronicznie (MiniSearch.loadJSONAsync). Nie blokuje UI przy dużych indeksach.">
+            data-tooltip="Jak 'Wczytaj', ale działa w tle i nie zamraża interfejsu. Lepsze przy dużych bazach danych.">
             Wczytaj async (loadJSONAsync)
           </button>
         </div>
@@ -838,6 +820,62 @@
           </div>
         }
       </div>
+    </section>
+
+    <!-- N-GRAM COMPARISON (ID-T 54) -->
+    <section class="ms-ngram-compare" aria-label="Porównanie n-gram vs standard">
+      <h2 class="ms-section-title">N-gram vs Standard</h2>
+      <p class="ms-section-desc">
+        Wpisz to samo hasło i porównaj wyniki z indeksu standardowego (pełne słowa) oraz n-gramowego (podciągi znaków).
+      </p>
+
+      <div class="ms-ngram-compare__search">
+        <input
+          type="text"
+          class="ms-ngram-compare__input"
+          placeholder="Wpisz hasło do porównania... np. 'angul'"
+          [(ngModel)]="ngramCompareQuery"
+          (keyup.enter)="runNgramCompare()"
+          data-tooltip="Wpisz hasło i naciśnij Enter, żeby zobaczyć różnicę między zwykłym wyszukiwaniem a wyszukiwaniem po fragmentach słów. Porównanie pokaże, który tryb lepiej radzi sobie z Twoim zapytaniem."
+        />
+        <button class="ms-btn ms-btn--primary ms-btn--sm" (click)="runNgramCompare()" [disabled]="!ngramCompareQuery.trim()"
+          data-tooltip="Uruchamia porównanie: to samo hasło jest wyszukiwane dwoma różnymi metodami — standardową i po fragmentach słów — żeby pokazać różnice w wynikach.">
+          Porównaj
+        </button>
+      </div>
+
+      @if (svc.ngramCompareResults(); as cmp) {
+        <div class="ms-ngram-compare__grid">
+          <div class="ms-ngram-compare__col">
+            <h3 class="ms-ngram-compare__col-title">Standard <span class="ms-ngram-compare__count">({{ cmp.standard.length }})</span></h3>
+            @if (cmp.standard.length === 0) {
+              <p class="ms-ngram-compare__empty">Brak wyników</p>
+            }
+            @for (r of cmp.standard; track r.id) {
+              <div class="ms-ngram-compare__item">
+                <span class="ms-ngram-compare__item-title">{{ r.title }}</span>
+                <span class="ms-ngram-compare__item-score">{{ formatScore(r.score) }}</span>
+              </div>
+            }
+          </div>
+          <div class="ms-ngram-compare__col ms-ngram-compare__col--ngram">
+            <h3 class="ms-ngram-compare__col-title">N-gram (n={{ svc.options().ngramSize }}) <span class="ms-ngram-compare__count">({{ cmp.ngram.length }})</span></h3>
+            @if (cmp.ngram.length === 0) {
+              <p class="ms-ngram-compare__empty">Brak wyników</p>
+            }
+            @for (r of cmp.ngram; track r.id) {
+              <div class="ms-ngram-compare__item">
+                <span class="ms-ngram-compare__item-title">{{ r.title }}</span>
+                <span class="ms-ngram-compare__item-score">{{ formatScore(r.score) }}</span>
+              </div>
+            }
+          </div>
+        </div>
+        <p class="ms-advanced__hint" style="margin-top: 0.75rem;">
+          Standard: prefix + fuzzy (domyślne). N-gram: podciągi o długości {{ svc.options().ngramSize }}
+          — łapie fragmenty wewnątrz słów, których prefix nie znajdzie.
+        </p>
+      }
     </section>
 
     <!-- MINI DOCUMENTATION -->
@@ -858,7 +896,7 @@
                   [href]="snippet.docUrl"
                   target="_blank"
                   rel="noopener noreferrer"
-                  title="Otwórz dokumentację powiązaną z tym smaczkiem."
+                  data-tooltip="Otwiera stronę dokumentacji związaną z tym przykładem kodu w nowej karcie."
                 >
                   Dokumentacja
                 </a>
@@ -866,7 +904,7 @@
                   class="ms-snippet__copy"
                   (click)="copySnippet(snippet.code, snippet.id)"
                   [attr.aria-label]="'Kopiuj fragment ' + snippet.title"
-                  title="Skopiuj ten przykład kodu do schowka."
+                  data-tooltip="Kopiuje ten fragment kodu do schowka, żebyś mógł go wkleić w swoim projekcie."
                 >
                   @if (copiedSnippet() === snippet.id) {
                     <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
@@ -980,6 +1018,31 @@
         <div class="ms-usecase-card">
           <h3>E-commerce</h3>
           <p>Szybkie wyszukiwanie produktów z tolerancją literówek i wzmacnianiem nazw oraz marek.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CUSTOM SOLUTIONS -->
+    <section class="ms-custom-solutions" aria-label="Nasze customowe rozwiązania">
+      <h2 class="ms-section-title">Co dodaliśmy od siebie</h2>
+      <p class="ms-section-desc">
+        Ta strona nie pokazuje tylko 'gołego" MiniSearch — dodaliśmy własne warstwy UX na wierzchu biblioteki.
+      </p>
+      <div class="ms-custom-solutions__grid">
+        <div class="ms-custom-solutions__card">
+          <h3>Podświetlenia mocy dopasowania</h3>
+          <p>
+            Wpisz <code>angular</code>, aby zobaczyć mocne dopasowanie (<em>exact</em>, zielony akcent),
+            a potem <code>anglar</code> — dopasowanie rozmyte (<em>fuzzy</em>, beżowy akcent).
+            Oba warianty w jednym widoku wyników.
+          </p>
+        </div>
+        <div class="ms-custom-solutions__card">
+          <h3>Klikalne linki</h3>
+          <p>
+            Każdy wynik ma link 'Otwórz dokument", a każdy smaczek w 'Szybkiej ściądze"
+            prowadzi do odpowiedniego fragmentu dokumentacji.
+          </p>
         </div>
       </div>
     </section>

@@ -7,6 +7,9 @@
 - Implementacja (ta tura): dodac wzmianke na stronie glownej o customowych rozwiazaniach i opisac nasz przyklad (`exact/fuzzy` highlight + linkowanie wynikow).
 - Implementacja (ta tura): naprawic skrot `Alt+Shift+M`, aby dzialal globalnie niezaleznie od miejsca fokusu (takze na marginesach).
 - Implementacja (ta tura): dopisac na stronie glownej liste smaczkow inspirowanych `floating-toc` z prostymi wyjasnieniami (build/index/snippet/ngrams/freshness).
+- Implementacja (ta tura): przebudowac tooltipy na customowe (dluzsze opisy + ladniejszy styl z zaokraglonymi ramkami) dla `/minisearch`.
+- Implementacja (ta tura): skorygowac sekcje inspiracji `floating-toc` na podstawie realnego audytu "co wdrozone vs co odlozone", zamiast listy 1:1.
+- Implementacja (ta tura): usunac calkowicie blok "Inspiracja (nie kopia 1:1) / Co wdrozylismy / Co swiadomie odlozylismy" z `/minisearch`.
 
 # Constraints/Assumptions:
 - Nie commitować sekretów; `/.env.test-accounts` ma pozostać lokalne (ignorowane przez Git).
@@ -98,11 +101,21 @@
 - 2026-02-12 23:57:12 Zaimplementowano `ID-T=50`: rozbudowano sekcje `.ms-custom-note` na stronie glownej `/minisearch` o liste wskazanych smaczkow (`buildSearchIndex`, `toSearchResult`, `buildSnippet`, `stripHtml`, `normalize`, `tokens`, `ngramsFor`, `buildNgramsField`, `getStepContentPlainText`, `buildSectionFreshness` + `evaluateStepFreshness`) z prostymi wyjasnieniami.
 - 2026-02-12 23:57:12 Potwierdzono walidacje `ID-T=50`: `make -C ut-angular test` = 51/51 PASS, `make -C ut-angular lint` = PASS; domknieto `ID-T=50` i przywrocono `SESSION_gui-1` na `ID-T=09`.
 - 2026-02-12 23:58:06 Wypchnieto implementacje `ID-T=50` na serwer: `origin/main`, commit `c9a2772`.
+- 2026-02-12 23:59:14 Dodano subtask `ID-T=51` dla przebudowy tooltipow na customowy styl i ustawiono `SESSION_gui-1` na `current-id-t: 51`.
+- 2026-02-13 00:02:18 Zaimplementowano `ID-T=51`: zamieniono tooltipy z natywnego `title` na `data-tooltip` (w tym bindingi dynamiczne `[attr.data-tooltip]`), dodano dluzsze opisy i nowy styl premium (zaokraglone ramki, gradient, cien, strzalka, animacja hover/focus).
+- 2026-02-13 00:02:18 Potwierdzono walidacje `ID-T=51`: `make -C ut-angular test` = 52/52 PASS, `make -C ut-angular lint` = PASS; domknieto `ID-T=51` i przywrocono `SESSION_gui-1` na `ID-T=09`.
+- 2026-02-13 00:07:52 Dodano subtask `ID-T=52` (audyt inspiracji floating-toc + selekcja wdrozen), utworzono plik `additional-notes/52-audyt-inspiracji-floating-toc.md` i ustawiono `SESSION_gui-1` na `current-id-t: 52`.
+- 2026-02-13 00:09:56 Zaimplementowano `ID-T=52`: sekcje inspiracji na stronie glownej przeredagowano z listy 1:1 do wersji "wdrozone i wartosciowe" vs "swiadomie odlozone", z uzasadnieniem.
+- 2026-02-13 00:09:56 Uzupelniono audyt decyzji w `additional-notes/52-audyt-inspiracji-floating-toc.md` (mamy/nie mamy + powod + kiedy wracac).
+- 2026-02-13 00:09:56 Potwierdzono walidacje `ID-T=52`: `make -C ut-angular test` = 52/52 PASS, `make -C ut-angular lint` = PASS; domknieto `ID-T=52` i przywrocono `SESSION_gui-1` na `ID-T=09`.
+- 2026-02-13 00:19:06 Dodano i zrealizowano `ID-T=53`: usunieto caly blok "Inspiracja / Co wdrozylismy / Co swiadomie odlozylismy" z `minisearch-page.component.html`, wyczyszczono nieuzywane klasy `.ms-custom-note__source`, `__subtitle`, `__func-list` w SCSS i zaktualizowano test komponentu pod nowy stan.
+- 2026-02-13 00:19:06 Potwierdzono walidacje `ID-T=53`: `make -C ut-angular test` = 52/52 PASS, `make -C ut-angular lint` = PASS; ustawiono `SESSION_gui-1` z powrotem na `ID-T=09`.
 
 # Now:
-- 2026-02-12 23:57:12 Trwa kontynuacja `ID-T=09` po domknieciu `ID-T=50` (przygotowanie do finalnych audytow zamykajacych task).
+- 2026-02-13 00:19:06 Trwa kontynuacja `ID-T=09` po domknieciu `ID-T=53` (gotowosc do finalnych audytow zamykajacych task).
 
 # Next:
+- Jesli pojawi sie potrzeba merytoryczna: rozwazyc backlog dla `stripHtml/getStepContentPlainText`, n-gramow i freshness po dopieciu metadanych.
 - Wykonac finalne audyty `ID-T=09` (2x subagent + Claude + Gemini) i zamknac task `..._in-progress` po braku blockerow.
 - Jesli nadal aktualne: dostarczyc osobno liste 30 dodatkowych smaczkow MiniSearch.
 

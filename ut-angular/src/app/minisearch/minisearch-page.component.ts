@@ -373,6 +373,14 @@ const restored = MiniSearch.loadJSON(json, {
     this.showLiveMessage(`Odtworzono indeks asynchronicznie (loadJSONAsync) w ${this.snapshotLoadTime().toFixed(1)} ms.`);
   }
 
+  /** ID-T 54: n-gram comparison query */
+  protected ngramCompareQuery = '';
+
+  /** ID-T 54: uruchom porównanie n-gram vs standard */
+  protected runNgramCompare(): void {
+    this.svc.compareNgramVsStandard(this.ngramCompareQuery);
+  }
+
   protected formatDirtFactor(value: number): string {
     return (value * 100).toFixed(1) + '%';
   }
@@ -395,9 +403,13 @@ const restored = MiniSearch.loadJSON(json, {
 
   protected getCombineTooltip(): string {
     const mode = this.svc.options().combineWith;
-    if (mode === 'OR') return 'Pokazuje wyniki zawierające dowolne z wpisanych słów. Przełącz na AND, aby wymagać wszystkich.';
-    if (mode === 'AND') return 'Pokazuje tylko wyniki zawierające wszystkie wpisane słowa. Przełącz na AND NOT, aby wykluczać terminy.';
-    return 'Wyszukuje wszystkie słowa, ale odrzuca wyniki pasujące do wykluczonych terminów. Przełącz na OR.';
+    if (mode === 'OR') {
+      return 'Pokazuje wyniki zawierające dowolne z wpisanych słów. Wpisujesz „angular react"? Zobaczysz dokumenty o Angularze ALBO o Reactcie. Daje najwięcej wyników — dobry punkt startowy. Kliknij, żeby przełączyć na tryb AND.';
+    }
+    if (mode === 'AND') {
+      return 'Pokazuje tylko wyniki zawierające WSZYSTKIE wpisane słowa naraz. Wpisujesz „angular framework"? Zobaczysz tylko dokumenty, w których występują oba słowa jednocześnie. Mniej wyników, ale celniejsze. Kliknij, żeby przełączyć na AND NOT.';
+    }
+    return 'Najpierw szuka wyników pasujących do głównych słów, a potem odrzuca te, w których pojawiają się słowa wykluczone (wpisz je poniżej w „Opcjach zaawansowanych"). Kliknij, żeby wrócić do trybu OR.';
   }
 
   protected getRoleLabel(role: string): string {

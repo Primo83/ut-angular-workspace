@@ -55,19 +55,29 @@ describe('MiniSearchPageComponent', () => {
     expect(hero?.textContent).toContain('MiniSearch');
   });
 
-  it('should show custom solutions note on homepage', async () => {
+  it('should show custom solutions section', async () => {
     fixture.detectChanges();
     await service.loadAndIndex();
     fixture.detectChanges();
 
     const el = fixture.nativeElement as HTMLElement;
-    const note = el.querySelector('.ms-custom-note');
+    const note = el.querySelector('.ms-custom-solutions');
     expect(note).toBeTruthy();
-    expect(note?.textContent).toContain('custom');
-    expect(note?.textContent).toContain('exact');
     expect(note?.textContent).toContain('fuzzy');
-    expect(note?.textContent).toContain('buildSearchIndex');
-    expect(note?.textContent).toContain('evaluateStepFreshness');
+    expect(note?.textContent).toContain('Klikalne linki');
+    expect(note?.textContent?.toLowerCase()).not.toContain('świadomie odłożyliśmy');
+  });
+
+  it('should use custom tooltip attributes instead of native title', async () => {
+    fixture.detectChanges();
+    await service.loadAndIndex();
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    const prefixButton = el.querySelector<HTMLButtonElement>('.ms-controls .ms-toggle');
+    expect(prefixButton).toBeTruthy();
+    expect(prefixButton?.getAttribute('data-tooltip')).toContain('podpowiadanie w Google');
+    expect(prefixButton?.hasAttribute('title')).toBe(false);
   });
 
   it('should show search input when ready', async () => {
@@ -356,6 +366,49 @@ describe('MiniSearchPageComponent', () => {
     const el = fixture.nativeElement as HTMLElement;
     const snapshotPanel = el.querySelector('.ms-snapshot-panel');
     expect(snapshotPanel).toBeTruthy();
+  });
+
+  // === ID-T 54: N-gram ===
+
+  it('should show ngram comparison section', async () => {
+    fixture.detectChanges();
+    await service.loadAndIndex();
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    const section = el.querySelector('.ms-ngram-compare');
+    expect(section).toBeTruthy();
+    expect(section?.querySelector('.ms-ngram-compare__input')).toBeTruthy();
+  });
+
+  it('should run ngram comparison and show results', async () => {
+    fixture.detectChanges();
+    await service.loadAndIndex();
+    fixture.detectChanges();
+
+    service.compareNgramVsStandard('angular');
+    fixture.detectChanges();
+
+    const cmp = service.ngramCompareResults();
+    expect(cmp).toBeTruthy();
+    expect(cmp!.standard.length).toBeGreaterThan(0);
+    expect(cmp!.ngram.length).toBeGreaterThan(0);
+
+    const el = fixture.nativeElement as HTMLElement;
+    const cols = el.querySelectorAll('.ms-ngram-compare__col');
+    expect(cols.length).toBe(2);
+  });
+
+  it('should reindex with ngram tokenizer when enabled', async () => {
+    fixture.detectChanges();
+    await service.loadAndIndex();
+    const countBefore = service.getTermCount();
+
+    service.updateIndexOption('ngramEnabled', true);
+    const countAfter = service.getTermCount();
+
+    // N-gram tokenizer produces more terms than standard
+    expect(countAfter).toBeGreaterThan(countBefore);
   });
 });
 

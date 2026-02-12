@@ -71,6 +71,9 @@ export interface SearchOptions {
   synonymsEnabled: boolean;
   discardTermsEnabled: boolean;
   customIdFieldEnabled: boolean;
+  // ID-T 54: N-gram tokenizer
+  ngramEnabled: boolean;
+  ngramSize: number;
 }
 
 export interface EnrichedResult extends SearchResult {
@@ -168,6 +171,8 @@ export class MiniSearchService {
     synonymsEnabled: false,
     discardTermsEnabled: false,
     customIdFieldEnabled: false,
+    ngramEnabled: false,
+    ngramSize: 3,
   });
 
   readonly results = signal<EnrichedResult[]>([]);
@@ -182,6 +187,8 @@ export class MiniSearchService {
   readonly asyncProgress = signal<number | null>(null);
   /** ID-T 45: zapisany snapshot indeksu */
   readonly snapshotJson = signal<string | null>(null);
+  /** ID-T 54: wyniki porównania n-gram vs standard */
+  readonly ngramCompareResults = signal<{ standard: EnrichedResult[]; ngram: EnrichedResult[] } | null>(null);
 
   async loadAndIndex(): Promise<void> {
     this.state.set({ status: 'loading' });
@@ -258,8 +265,27 @@ export class MiniSearchService {
       return (val as string) ?? '';
     };
 
+    // ID-T 54: n-gram tokenizer
+    if (opts.ngramEnabled) {
+      const n = opts.ngramSize;
+      msOpts['tokenize'] = (text: string): string[] => {
+        const words = text.toLowerCase().split(/\s+/).filter(Boolean);
+        const ngrams: string[] = [];
+        for (const word of words) {
+          if (word.length <= n) {
+            ngrams.push(word);
+          } else {
+            for (let i = 0; i <= word.length - n; i++) {
+              ngrams.push(word.substring(i, i + n));
+            }
+          }
+        }
+        return ngrams;
+      };
+    }
+
     // ID-T 33/34: custom tokenize
-    if (opts.customTokenizeEnabled || opts.splitTokenizeEnabled) {
+    if (!opts.ngramEnabled && (opts.customTokenizeEnabled || opts.splitTokenizeEnabled)) {
       const camelCase = (text: string): string[] =>
         text.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/[-_]+/g, ' ')
           .toLowerCase().split(/\s+/).filter(Boolean);
@@ -617,6 +643,56 @@ export class MiniSearchService {
   /** Lista aktualnych dokumentów (do UI remove/discard) */
   getDocuments(): DocRecord[] {
     return this.documents;
+  }
+
+  /** ID-T 54: porównanie n-gram vs standard — buduje oba indeksy i zwraca wyniki */
+  compareNgramVsStandard(query: string): void {
+    if (!query.trim() || this.documents.length === 0) {
+      this.ngramCompareResults.set(null);
+      return;
+    }
+    const docs = this.documents;
+    const baseFields = { fields: ['title', 'text', 'tags'], storeFields: ['title', 'text', 'tags', 'category'] };
+
+    // Standard index
+    const stdIdx = new MiniSearch<DocRecord>({ ...baseFields });
+    stdIdx.addAll(docs);
+    const stdResults = stdIdx.search(query, { prefix: true, fuzzy: 0.2 });
+
+    // N-gram index
+    const n = this.options().ngramSize;
+    const ngramTokenize = (text: string): string[] => {
+      const words = text.toLowerCase().split(/\s+/).filter(Boolean);
+      const ngrams: string[] = [];
+      for (const word of words) {
+        if (word.length <= n) { ngrams.push(word); }
+        else { for (let i = 0; i <= word.length - n; i++) ngrams.push(word.substring(i, i + n)); }
+      }
+      return ngrams;
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ngramIdx = new MiniSearch<DocRecord>({ ...baseFields, tokenize: ngramTokenize } as any);
+    ngramIdx.addAll(docs);
+    const ngramResults = ngramIdx.search(query, { prefix: false, fuzzy: false });
+
+    const enrich = (r: SearchResult): EnrichedResult => {
+      const doc = docs.find(d => d.id === r.id);
+      return {
+        ...r,
+        title: doc?.title ?? '',
+        text: doc?.text ?? '',
+        category: doc?.category ?? '',
+        tags: doc?.tags ?? [],
+        url: doc?.url ?? '',
+        highlightedTitle: doc?.title ?? '',
+        highlightedText: doc?.text ?? '',
+      };
+    };
+
+    this.ngramCompareResults.set({
+      standard: stdResults.slice(0, 5).map(r => enrich(r)),
+      ngram: ngramResults.slice(0, 5).map(r => enrich(r)),
+    });
   }
 
   getDirtCount(): number {
