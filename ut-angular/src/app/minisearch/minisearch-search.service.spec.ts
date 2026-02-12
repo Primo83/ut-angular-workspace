@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { MiniSearchService } from './minisearch-search.service';
 
 const MOCK_DOCS = [
-  { id: 1, title: 'Angular Framework', text: 'A frontend framework by Google', tags: ['angular', 'frontend'], category: 'concepts' },
+  { id: 1, title: 'Angular Framework', text: 'A frontend framework by Google', tags: ['angular', 'frontend'], category: 'concepts', url: 'https://example.com/angular-framework' },
   { id: 2, title: 'React Library', text: 'A UI library by Meta', tags: ['react', 'frontend'], category: 'concepts' },
   { id: 3, title: 'Node.js Runtime', text: 'JavaScript runtime for server', tags: ['node', 'backend'], category: 'api' },
   { id: 4, title: 'Prefix Search', text: 'Search by beginning of terms', tags: ['prefix', 'search'], category: 'examples' },
@@ -125,7 +125,20 @@ describe('MiniSearchService', () => {
       it('should highlight matched terms', () => {
         service.search('angular');
         const r = service.results()[0];
-        expect(r.highlightedTitle).toContain('<mark>');
+        expect(r.highlightedTitle).toContain('ms-highlight--exact');
+      });
+
+      it('should mark fuzzy matches with dedicated class', () => {
+        service.updateOption('fuzzy', true);
+        service.search('anglar');
+        const r = service.results()[0];
+        expect(r.highlightedTitle).toContain('ms-highlight--fuzzy');
+      });
+
+      it('should expose clickable document URL in search results', () => {
+        service.search('angular');
+        const r = service.results()[0];
+        expect(r.url).toBe('https://example.com/angular-framework');
       });
     });
   });

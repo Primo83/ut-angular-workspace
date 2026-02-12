@@ -87,6 +87,10 @@ $cat-use-cases: #f472b6;
     gap: 2rem;
     flex-wrap: wrap;
   }
+
+  &__offline {
+    margin-top: 1.25rem;
+  }
 }
 
 .ms-stat {
@@ -96,6 +100,61 @@ $cat-use-cases: #f472b6;
   strong {
     color: $color-text;
     font-weight: 600;
+  }
+
+  &--offline {
+    background: rgba($color-accent, 0.12);
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: $color-accent;
+  }
+}
+
+.ms-custom-note {
+  margin: 0 auto 2.25rem;
+  max-width: 860px;
+  padding: 1.1rem 1.2rem;
+  border-radius: $radius-md;
+  border: 1px solid rgba($color-accent, 0.35);
+  background:
+    linear-gradient(120deg, rgba($color-accent, 0.18), rgba(#22d3ee, 0.06)),
+    rgba($color-surface, 0.72);
+  text-align: left;
+
+  &__title {
+    margin: 0 0 0.35rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: $color-text;
+  }
+
+  &__desc {
+    margin: 0 0 0.55rem;
+    font-size: 0.88rem;
+    color: $color-text-muted;
+    line-height: 1.5;
+  }
+
+  &__list {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: grid;
+    gap: 0.45rem;
+    color: $color-text;
+    font-size: 0.84rem;
+    line-height: 1.45;
+  }
+
+  code {
+    font-family: $font-mono;
+    font-size: 0.75rem;
+    background: rgba($color-bg, 0.75);
+    border: 1px solid $color-border;
+    border-radius: 4px;
+    padding: 0.05rem 0.33rem;
   }
 }
 
@@ -213,6 +272,26 @@ $cat-use-cases: #f472b6;
   }
 }
 
+// Shortcut hint
+.ms-shortcut-hint {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: $color-text-muted;
+  text-align: right;
+
+  kbd {
+    display: inline-block;
+    font-family: $font-mono;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
+    background: $color-surface;
+    border: 1px solid $color-border;
+    border-radius: 4px;
+    color: $color-text;
+    line-height: 1;
+  }
+}
+
 // Controls
 .ms-controls {
   display: flex;
@@ -279,6 +358,177 @@ $cat-use-cases: #f472b6;
     font-size: 0.7rem;
     margin-left: 0.25rem;
     opacity: 0.7;
+  }
+}
+
+// Advanced options panel (ID-T 12–19)
+.ms-advanced {
+  margin-top: 0.75rem;
+
+  &__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: $font-sans;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: $color-text-muted;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.35rem 0;
+    transition: color 0.15s;
+
+    &:hover {
+      color: $color-text;
+    }
+  }
+
+  &__panel {
+    margin-top: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: $color-surface;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  &__group {
+    h4 {
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem;
+      color: $color-text;
+    }
+  }
+
+  &__chips {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  &__hint {
+    font-size: 0.72rem;
+    color: $color-text-muted;
+    margin: 0.35rem 0 0;
+  }
+
+  &__slider-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.35rem;
+
+    label {
+      font-size: 0.75rem;
+      color: $color-text-muted;
+      white-space: nowrap;
+      min-width: 4.5rem;
+    }
+
+    input[type='range'] {
+      flex: 1;
+      accent-color: $color-accent;
+      height: 4px;
+      cursor: pointer;
+    }
+  }
+
+  &__value {
+    font-family: $font-mono;
+    font-size: 0.75rem;
+    color: $color-accent;
+    min-width: 2.5rem;
+    text-align: right;
+  }
+
+  &__inline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  &__input {
+    font-family: $font-sans;
+    font-size: 0.85rem;
+    padding: 0.45rem 0.65rem;
+    background: $color-bg;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    color: $color-text;
+    outline: none;
+    transition: border-color 0.15s;
+
+    &:focus {
+      border-color: $color-accent;
+      box-shadow: 0 0 0 2px $color-accent-bg;
+    }
+
+    &::placeholder {
+      color: $color-text-muted;
+    }
+  }
+
+  &__query-tree-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    label {
+      font-size: 0.75rem;
+      color: $color-text-muted;
+      white-space: nowrap;
+      min-width: 6rem;
+    }
+
+    .ms-advanced__input {
+      flex: 1;
+    }
+  }
+
+  &__query-tree-label {
+    font-family: $font-mono;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $color-accent;
+    text-align: center;
+    padding: 0.15rem 0;
+  }
+
+  &__select {
+    font-family: $font-sans;
+    font-size: 0.85rem;
+    padding: 0.45rem 0.65rem;
+    background: $color-bg;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    color: $color-text;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s;
+
+    &:focus {
+      border-color: $color-accent;
+      box-shadow: 0 0 0 2px $color-accent-bg;
+    }
+  }
+
+  &__separator {
+    border-top: 1px solid $color-border;
+    padding-top: 1.25rem;
+    margin-top: 0.25rem;
+  }
+
+  &__section-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: $color-accent;
+    margin: 0 0 0.25rem;
+    letter-spacing: -0.01em;
   }
 }
 
@@ -393,13 +643,6 @@ $cat-use-cases: #f472b6;
     font-weight: 600;
     margin: 0 0 0.35rem;
     line-height: 1.4;
-
-    ::ng-deep mark {
-      background: $color-mark;
-      color: inherit;
-      border-radius: 2px;
-      padding: 0 1px;
-    }
   }
 
   &__text {
@@ -407,13 +650,66 @@ $cat-use-cases: #f472b6;
     color: $color-text-muted;
     line-height: 1.55;
     margin: 0;
+  }
 
-    ::ng-deep mark {
-      background: $color-mark;
-      color: inherit;
-      border-radius: 2px;
-      padding: 0 1px;
+  ::ng-deep .ms-highlight {
+    background: rgba($color-accent, 0.18);
+    color: inherit;
+    padding: 0 0.12em;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    box-shadow: none;
+    box-decoration-break: clone;
+  }
+
+  ::ng-deep .ms-highlight.ms-highlight--exact {
+    border: 1px solid rgba($color-success, 0.45);
+    box-shadow: 0 0 0 1px rgba($color-success, 0.12);
+    background: rgba($color-success, 0.14);
+  }
+
+  ::ng-deep .ms-highlight.ms-highlight--fuzzy {
+    border: 1px solid rgba($color-text-muted, 0.35);
+    box-shadow: 0 0 0 1px rgba($color-text-muted, 0.08);
+    background: #f2e6d1;
+  }
+
+  &__actions {
+    margin-top: 0.55rem;
+    display: flex;
+    align-items: center;
+  }
+
+  &__doc-link {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: $color-accent;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba($color-accent, 0.45);
+    transition: color 0.15s, border-color 0.15s;
+
+    &:hover {
+      color: $color-accent-hover;
+      border-color: rgba($color-accent-hover, 0.55);
     }
+  }
+
+  &__explanation {
+    font-size: 0.72rem;
+    color: $color-text-muted;
+    background: rgba($color-accent, 0.06);
+    border: 1px solid rgba($color-accent, 0.15);
+    border-radius: $radius-sm;
+    padding: 0.35rem 0.6rem;
+    margin-top: 0.5rem;
+    font-family: $font-mono;
+    line-height: 1.5;
+  }
+
+  &__explanation-label {
+    font-weight: 600;
+    color: $color-accent;
+    margin-right: 0.3rem;
   }
 
   &__tags {
@@ -450,6 +746,290 @@ $cat-use-cases: #f472b6;
   }
 }
 
+// ── LIVE INDEXING ──
+.ms-live-indexing {
+  margin-bottom: 4rem;
+}
+
+.ms-live-form {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 1rem;
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__row {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+
+    &--half {
+      flex: 1;
+    }
+
+    label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: $color-text-muted;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    input,
+    textarea,
+    select {
+      font-family: $font-sans;
+      font-size: 0.875rem;
+      padding: 0.55rem 0.75rem;
+      background: $color-bg;
+      border: 1px solid $color-border;
+      border-radius: $radius-sm;
+      color: $color-text;
+      outline: none;
+      transition: border-color 0.15s;
+
+      &:focus {
+        border-color: $color-accent;
+        box-shadow: 0 0 0 2px $color-accent-bg;
+      }
+
+      &::placeholder {
+        color: $color-text-muted;
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 48px;
+    }
+
+    select {
+      cursor: pointer;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  &__message {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: $radius-sm;
+    background: rgba($color-accent, 0.1);
+    color: $color-accent;
+
+    &--success {
+      background: rgba($color-success, 0.1);
+      color: $color-success;
+    }
+  }
+}
+
+// ── BATCH OPS (ID-T 40/41) ──
+.ms-batch-ops {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+}
+
+.ms-progress-bar {
+  position: relative;
+  height: 24px;
+  background: $color-bg;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  margin-top: 0.75rem;
+  overflow: hidden;
+
+  &__fill {
+    height: 100%;
+    background: linear-gradient(90deg, $color-accent, $color-accent-hover);
+    border-radius: $radius-sm;
+    transition: width 0.15s ease-out;
+  }
+
+  &__label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-mono;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $color-text;
+  }
+}
+
+// ── REMOVE / DISCARD OPS (ID-T 42/43/44) ──
+.ms-remove-ops {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+
+  &__row {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  &__field {
+    flex: 1;
+    min-width: 200px;
+
+    label {
+      display: block;
+      font-family: $font-mono;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: $color-accent;
+      margin-bottom: 0.35rem;
+    }
+  }
+
+  &__input-group {
+    display: flex;
+    gap: 0.4rem;
+
+    input {
+      flex: 1;
+      font-family: $font-sans;
+      font-size: 0.85rem;
+      padding: 0.45rem 0.65rem;
+      background: $color-bg;
+      border: 1px solid $color-border;
+      border-radius: $radius-sm;
+      color: $color-text;
+      outline: none;
+      transition: border-color 0.15s;
+
+      &:focus {
+        border-color: $color-accent;
+        box-shadow: 0 0 0 2px $color-accent-bg;
+      }
+
+      &::placeholder {
+        color: $color-text-muted;
+      }
+    }
+  }
+
+  &__discard-all {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid $color-border;
+  }
+}
+
+.ms-confirm-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  &__text {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: $color-error;
+  }
+}
+
+// ── SNAPSHOT PANEL (ID-T 45) ──
+.ms-snapshot-panel {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: 1.25rem 1.5rem;
+  margin-top: 1rem;
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  &__info {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: $color-text-muted;
+    padding: 0.5rem 0.75rem;
+    background: rgba($color-accent, 0.06);
+    border-radius: $radius-sm;
+
+    strong {
+      color: $color-accent;
+      font-family: $font-mono;
+    }
+  }
+}
+
+.ms-live-metrics {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: 1rem 1.5rem;
+
+  &__vacuum {
+    margin-left: auto;
+  }
+}
+
+.ms-live-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+
+  &__value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $color-text;
+    font-family: $font-mono;
+  }
+
+  &__label {
+    font-size: 0.7rem;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
 // ── DOCUMENTATION / SNIPPETS ──
 .ms-docs {
   margin-bottom: 4rem;
@@ -475,10 +1055,34 @@ $cat-use-cases: #f472b6;
     border-bottom: 1px solid $color-border;
   }
 
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
   &__title {
     font-size: 0.85rem;
     font-weight: 600;
     margin: 0;
+  }
+
+  &__doc-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: $font-sans;
+    font-size: 0.75rem;
+    color: $color-accent;
+    text-decoration: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: $radius-sm;
+    border: 1px solid rgba($color-accent, 0.35);
+    transition: all 0.15s;
+
+    &:hover {
+      background: $color-accent-bg;
+      border-color: rgba($color-accent, 0.55);
+    }
   }
 
   &__copy {
@@ -665,6 +1269,11 @@ $cat-use-cases: #f472b6;
       color: $color-accent;
     }
   }
+
+  &--sm {
+    font-size: 0.8rem;
+    padding: 0.4rem 1rem;
+  }
 }
 
 // ── Focus Visible (a11y) ──
@@ -673,7 +1282,8 @@ $cat-use-cases: #f472b6;
 .ms-suggestion-chip,
 .ms-snippet__copy,
 .ms-btn,
-.ms-search-bar__clear {
+.ms-search-bar__clear,
+.ms-advanced__toggle {
   &:focus-visible {
     outline: 2px solid $color-accent;
     outline-offset: 2px;

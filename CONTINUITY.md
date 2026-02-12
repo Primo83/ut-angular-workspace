@@ -1,6 +1,11 @@
 # Goal (incl. success criteria):
-- Zrealizować task `20260212-1832-wypasiona-i-piekna-strona-minisearch_*`: zaprojektować i wdrożyć w `ut-angular/` czytelną, atrakcyjną stronę pod prezentację ~30 minut, która jest pokazem możliwości MiniSearch (przewodnik + zachęta + mini dokumentacja).
-- Sukces: strona jest dostępna w aplikacji (route + link), pokazuje kluczowe funkcje MiniSearch na realnym datasete; `make -C ut-angular lint` i `make -C ut-angular test` przechodzą; test manualny wykonany przez `agent-browser` i opisany w `additional-notes/`.
+- Realizowac task `20260212-2023-ulepszenia-prezentacji-minisearch-50-smaczkow-i-dopracowanie-ux_*`: po audycie wdrozenia 50 punktow dodac osobny subtask dla kazdego brakujacego punktu i dopiac wymog pelnego spolszczenia.
+- Sukces biezacego etapu: `tasks.md` zawiera oddzielne ID-T dla kazdego niezamknietego punktu z listy 50 oraz osobny krok "100% spolszczenia", ze stanem gotowym do realizacji.
+- Ad-hoc (ta tura): przygotowac dodatkowe 30 smaczkow do prezentacji MiniSearch na prosbe wlasciciela.
+- Implementacja (ta tura): dodac klikalne linki do dokumentow w sekcji smaczkow oraz w wynikach wyszukiwania na `/minisearch`.
+- Implementacja (ta tura): dodac customowe podswietlenia `exact/fuzzy` (inspiracja floating-toc) w wynikach MiniSearch.
+- Implementacja (ta tura): dodac wzmianke na stronie glownej o customowych rozwiazaniach i opisac nasz przyklad (`exact/fuzzy` highlight + linkowanie wynikow).
+- Implementacja (ta tura): naprawic skrot `Alt+Shift+M`, aby dzialal globalnie niezaleznie od miejsca fokusu (takze na marginesach).
 
 # Constraints/Assumptions:
 - Nie commitować sekretów; `/.env.test-accounts` ma pozostać lokalne (ignorowane przez Git).
@@ -17,7 +22,8 @@
 
 # State:
 - Git: `main` śledzi `origin/main` (`https://github.com/Primo83/ut-angular-workspace.git`).
-- Tasks: `agents-tasks-knowledge/SESSION.md` wskazuje `20260212-1340-workspace-bootstrap_in-progress` (ID-T=01); `agents-tasks-knowledge/SESSION_gui-1.md` wskazuje `20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress` (ID-T=02).
+- Tasks: `agents-tasks-knowledge/SESSION.md` wskazuje `20260212-1340-workspace-bootstrap_in-progress` (ID-T=01); `agents-tasks-knowledge/SESSION_gui-1.md` wskazuje `20260212-2023-ulepszenia-prezentacji-minisearch-50-smaczkow-i-dopracowanie-ux_in-progress` (ID-T=09).
+- Plan gate: wykonano 3 pelne rundy audytu planu (`2032`, `2038`, `2047`) i zamknieto `ID-T=01` zgodnie z regula: P0/P1=0, P2 po 3 rundach nieblokujace.
 - Repo: `ut-angular/` zawiera baseline Angular (m.in. `package.json`, `angular.json`, `src/`) + Docker-only uruchomienie (`compose.yaml` + `docker/Dockerfile.dev` + `Makefile`).
 
 # Done:
@@ -64,18 +70,40 @@
 - 2026-02-12 20:07:54 Odczytano i zsynchronizowano ledger dla ad-hoc pytania o 30 zastosowan MiniSearch (bez zmian w kodzie).
 - 2026-02-12 20:09:59 Odczytano i zsynchronizowano ledger dla follow-up: dodatkowe 20 zastosowan MiniSearch (bez zmian w kodzie).
 - 2026-02-12 20:12:56 Odczytano i zsynchronizowano ledger dla prosby o 50 "smaczkow" prezentacyjnych MiniSearch; zweryfikowano mozliwosci API przez Context7 i zrodla upstream (README + `src/MiniSearch.ts`).
+- 2026-02-12 20:47:00 Europe/Warsaw Claude przeprowadził audyt planu rundy `20260212-2047` dla `20260212-2023-ulepszenia-prezentacji-minisearch-50-smaczkow-i-dopracowanie-ux_planning`; raport PASS (P0=0/P1=0/P2=0) zapisany w `additional-notes/20260212-2047-plan-audit-claude.md`.
+- 2026-02-12 20:58:05 Zamknieto `ID-T=01` jako `done`, ustawiono `ID-T=02` na `in-progress`, przeniesiono task do `_in-progress` i ustawiono `SESSION_gui-1` na `ID-T=02`.
+- 2026-02-12 20:58:05 Uzupelniono i uszczegolowiono artefakty planu `additional-notes/02-macierz-50-smaczkow.md`, `03-copy-guide.md`, `05-live-indexing.md`, `06-tooltips-a11y.md`, `07-definition-of-100.md`, `08-tests.md`, `09-manual.md`; `./doctor --json` green.
+- 2026-02-12 22:02:36 Odczytano aktualny stan taska i sesji (`SESSION_gui-1`: `ID-T=09`) oraz rozpoczęto audyt wdrozenia wszystkich 50 punktow z planu.
+- 2026-02-12 22:05:30 Zmapowano status 50 smaczków MiniSearch w odniesieniu do `minisearch-search.service.ts` i powiązanych testów, przygotowując dowody (plik:linia) dla raportu.
+- 2026-02-12 22:07:36 Odebrano dwa kompletne raporty subagentow (service + UI) i przygotowano liste punktow `missing/partial` do rozpisania na osobne subtaski.
+- 2026-02-12 22:09:27 Dodano raport `additional-notes/09-audyt-pokrycia-50-smaczkow.md` oraz zaktualizowano `tasks.md`: osobny subtask na "100% spolszczenia" (ID-T=10) i osobne subtaski dla kazdego z 35 niezamknietych punktow z listy 50 (ID-T=11..45).
+- 2026-02-12 22:09:27 Zweryfikowano workflow przez `./doctor --json` (errors=0, warnings=0).
+- 2026-02-12 22:09:58 Zsynchronizowano `SESSION_gui-1.md` przez `./taskctl set-session` (task `..._in-progress`, `ID-T=09`) i potwierdzono walidacje bez bledow.
+- 2026-02-12 23:28:41 Dodano nowy krok planu `ID-T=46` (klikalne linki w smaczkach i wynikach) i ustawiono sesje na `ID-T=46`.
+- 2026-02-12 23:32:13 Zaimplementowano linki: `EnrichedResult.url` z fallbackiem do wyszukiwarki GitHub, link "Otworz dokument" w wynikach, linki dokumentacji dla smaczkow/snippetow, oraz testy dla obu przypadkow.
+- 2026-02-12 23:32:43 Domknieto `ID-T=46` jako `done`, przywrocono `SESSION_gui-1` na `ID-T=09`, weryfikacja: `make -C ut-angular test` = 48/48 PASS, `make -C ut-angular lint` = PASS, `taskctl` validation green.
+- 2026-02-12 23:41:40 Dodano `ID-T=47` (custom highlight exact/fuzzy), ustawiono `SESSION_gui-1` na `current-id-t: 47` i zebrano wzorzec inspiracyjny z `baltec-gui` do implementacji.
+- 2026-02-12 23:46:23 Zweryfikowano, ze implementacja highlightu `exact/fuzzy` w `ut-angular/src/app/minisearch/minisearch-search.service.ts` odwzorowuje wymagany efekt na bazie inspiracji z `baltec-gui` (bez kopiowania 1:1); przygotowano domkniecie `ID-T=47`.
+- 2026-02-12 23:47:46 Potwierdzono walidacje implementacji `ID-T=47`: `make -C ut-angular test` = 49/49 PASS, `make -C ut-angular lint` = PASS.
+- 2026-02-12 23:47:46 Domknieto `ID-T=47` przez `./taskctl set-id-t-status ... --to done`, uzupelniono wpis w `tasks.md`, przywrocono `SESSION_gui-1` na `ID-T=09`.
+- 2026-02-12 23:49:07 Potwierdzono, ze strona glowna `/` przekierowuje na `/minisearch` (`ut-angular/src/app/app.routes.ts`), wiec wzmianke o customowych rozwiazaniach nalezy dodac bezposrednio do widoku MiniSearch.
+- 2026-02-12 23:50:56 Dodano nowy subtask `ID-T=48` (wzmianka na stronie glownej o customowych rozwiazaniach), ustawiono `SESSION_gui-1` na `ID-T=48`, a nastepnie wdrozono sekcje `.ms-custom-note` w `minisearch-page.component.html/.scss` z opisem przykladu `exact/fuzzy` i linkowania wynikow/smaczkow.
+- 2026-02-12 23:50:56 Potwierdzono walidacje `ID-T=48`: `make -C ut-angular test` = 50/50 PASS, `make -C ut-angular lint` = PASS; domknieto `ID-T=48` i przywrocono `SESSION_gui-1` na `ID-T=09`.
+- 2026-02-12 23:52:17 Dodano subtask `ID-T=49` dla poprawki globalnego skrotu `Alt+Shift+M` i ustawiono `SESSION_gui-1` na `current-id-t: 49`.
+- 2026-02-12 23:53:49 Zaimplementowano poprawke skrotu: obsluga `Alt+Shift+M` przeniesiona do `@HostListener('window:keydown')`, usunieto lokalny `(keydown)` z `.ms-page`, dodano test regresji dla eventu wyslanego do `window`.
+- 2026-02-12 23:53:49 Potwierdzono walidacje `ID-T=49`: `make -C ut-angular test` = 51/51 PASS, `make -C ut-angular lint` = PASS; domknieto `ID-T=49` i przywrocono `SESSION_gui-1` na `ID-T=09`.
 
 # Now:
-- 2026-02-12 20:12:56 Przygotowanie odpowiedzi ad-hoc: 50 smaczkow mozliwosci MiniSearch zorientowanych na atrakcyjna prezentacje.
+- 2026-02-12 23:53:49 Trwa kontynuacja `ID-T=09` po domknieciu `ID-T=49` (przygotowanie do finalnych audytow zamykajacych task).
 
 # Next:
-- Odpowiedziec uzytkownikowi lista 50 smaczkow MiniSearch.
-- Wrocic do realizacji `ID-T=02` (projekt UX/content strony pod prezentacje 30 min) i zaktualizowac statusy w `tasks.md`.
+- Wykonac finalne audyty `ID-T=09` (2x subagent + Claude + Gemini) i zamknac task `..._in-progress` po braku blockerow.
+- Jesli nadal aktualne: dostarczyc osobno liste 30 dodatkowych smaczkow MiniSearch.
 
 # Open questions (UNCONFIRMED if needed):
 - UNCONFIRMED Czy katalog `gui/` będzie docelowo usunięty/porzucony na rzecz `ut-angular/` (na razie oba istnieją)?
 
 # Working set (files/ids/commands):
-- Task: `agents-tasks-knowledge/tasks/20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress`
-- Files: `CONTINUITY.md`, `agents-tasks-knowledge/SESSION_gui-1.md`, `agents-tasks-knowledge/tasks/20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress/tasks.md`, `agents-tasks-knowledge/tasks/20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress/additional-contexts.md`, `agents-tasks-knowledge/tasks/20260212-1832-wypasiona-i-piekna-strona-minisearch_in-progress/additional-notes/20260212-19*-plan-audit-*.md`
-- Commands: `./taskctl set-id-t-status ...`, `./taskctl set-session ...`, `./doctor --json`, `make -C ut-angular lint`, `make -C ut-angular test`
+- Task: `agents-tasks-knowledge/tasks/20260212-2023-ulepszenia-prezentacji-minisearch-50-smaczkow-i-dopracowanie-ux_in-progress`
+- Files: `CONTINUITY.md`, `agents-tasks-knowledge/SESSION_gui-1.md`, `agents-tasks-knowledge/tasks/20260212-2023-ulepszenia-prezentacji-minisearch-50-smaczkow-i-dopracowanie-ux_in-progress/tasks.md`, `agents-tasks-knowledge/tasks/20260212-2023-ulepszenia-prezentacji-minisearch-50-smaczkow-i-dopracowanie-ux_in-progress/additional-contexts.md`, `agents-tasks-knowledge/tasks/20260212-2023-ulepszenia-prezentacji-minisearch-50-smaczkow-i-dopracowanie-ux_in-progress/additional-notes/09-audyt-pokrycia-50-smaczkow.md`, `ut-angular/src/app/minisearch/minisearch-search.service.ts`, `ut-angular/src/app/minisearch/minisearch-page.component.ts`, `ut-angular/src/app/minisearch/minisearch-page.component.html`, `ut-angular/src/app/minisearch/minisearch-page.component.scss`, `ut-angular/src/app/minisearch/minisearch-search.service.spec.ts`, `ut-angular/src/app/minisearch/minisearch-page.component.spec.ts`
+- Commands: `./taskctl set-id-t-status ...`, `./taskctl move-status ...`, `./taskctl set-session ...`, `./doctor --json`
