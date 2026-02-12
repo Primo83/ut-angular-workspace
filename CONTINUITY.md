@@ -14,12 +14,13 @@
 
 # Done:
 - 2026-02-12 13:47:30 Sprawdzono, że katalog nie jest repozytorium Git oraz że brak `README.md` i `.gitignore`.
+- 2026-02-12 13:47:54 Utworzono `README.md`, `.gitignore`, zainicjalizowano repo Git, wykonano commit i wypchnięto `main` do `origin`.
 
 # Now:
-- 2026-02-12 13:47:30 Tworzenie `CONTINUITY.md`, `.gitignore`, `README.md`; następnie `git init`, commit i push na `main`.
+- 2026-02-12 13:47:54 Weryfikacja stanu po push (remote, branch, clean working tree).
 
 # Next:
-- `git init` + commit (z pominięciem `/.env.test-accounts`) + `git push -u origin main`.
+- Upewnić się, że `/.env.test-accounts` nie jest śledzony oraz że `origin`/`main` są poprawnie ustawione.
 
 # Open questions (UNCONFIRMED if needed):
 - UNCONFIRMED Czy GitHub repo jest puste (brak refów) i przyjmie pierwszy push po HTTPS bez dodatkowej autoryzacji.
