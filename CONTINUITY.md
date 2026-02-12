@@ -26,7 +26,7 @@
 - 2026-02-12 14:23:32 Domknięto `20260212-1403-workspace-sync-audit_*`: ścieżki `gui/` -> `ut-angular/` w instrukcjach user-owned, `project.yaml` dopięty, `./doctor --json` green, task przeniesiony do `_done`.
 
 # Now:
-- 2026-02-12 14:23:32 Commit/push zmian z sync-audit (origin/old-origin, utworzone `ut-angular/`, poprawki instrukcji user-owned).
+- 2026-02-12 14:26:49 Weryfikacja: brak lokalnych zmian do commita; `main` jest już wypchnięty (ostatni commit: `e270b8d`).
 
 # Next:
 - Kontynuować planowanie taska Angulara: `20260212-1353-wgranie-najnowszego-angulara-docker-compose_proposal` (ID‑T=01).
