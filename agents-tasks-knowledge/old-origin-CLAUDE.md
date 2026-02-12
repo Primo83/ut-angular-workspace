@@ -17,7 +17,7 @@
 5. **Nigdy** nie wybieraj do pracy katalogów `example1-task_done/`, `example2-task_in-progress/` ani `template-task_proposal/` – to tylko referencje / szablon do kopiowania.
 
 6. Wyjątek: jeśli właściciel repozytorium **wprost mówi**, że chodzi tylko o jednorazową analizę /
-   wyjaśnienie bez zmian w repo (zgodnie z głównym `GEMINI.md`), możesz potraktować ten plik
+   wyjaśnienie bez zmian w repo (zgodnie z głównym `CLAUDE.md`), możesz potraktować ten plik
    wyłącznie jako referencję i **nie tworzyć / nie aktualizować** zadań w `tasks/`.
 
 7. Jeśli w repo istnieje `CONTINUITY.md`, to przy pytaniach o status / wznowienie pracy łączysz go z `SESSION*.md`
@@ -35,15 +35,15 @@
 
 - `AGENT_PROFILES.md` – tabela z profilami agentów (`AGENT_ID` + meta subagentów: `agent_type`, `name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `skills`, `hooks`); używana do interaktywnego wyboru roli na starcie sesji. `agent_type` jest opisowe (default/orchestrator/worker) i **nie** zastępuje `type` komponentu.
 
-- `ideas/`  
+- `ideas/`
   Miejsce na zalążki przyszłych inicjatyw, pomysły i obserwacje, które **nie są jeszcze zadaniami**.
     - `ideas/ideas.md` zawiera listę idei w formacie Markdown (szablon wpisu jest w tym pliku).
-      Każdy wpis ma `Created` (co do minuty) oraz `Status` / checkbox, plus pola rozszerzone (Cel/Wartość, Zakres, Priorytet, Horyzont, Zależności, Ryzyka, Mierniki sukcesu, Owner).  
+      Każdy wpis ma `Created` (co do minuty) oraz `Status` / checkbox, plus pola rozszerzone (Cel/Wartość, Zakres, Priorytet, Horyzont, Zależności, Ryzyka, Mierniki sukcesu, Owner).
       Uzupełniaj ją, aby żadna myśl nie „uciekła”.
 
-- `tasks/` – plany operacyjne.  
+- `tasks/` – plany operacyjne.
   Każde zadanie ma folder `<ID-Z>_<status>/` ([możliwe statusy](#files-statuses)) z:
-    - `additional-contexts.md` – rozszerzony opis tła zadania (najczęściej opis zrobiony przez analityka biznesowego: oczekiwania klienta, opis funkcjonalności prozą; można tu wkleić opis np. z Jiry). **Kanoniczny szablon tego pliku, podział ról BA / agenta, zasady trybu „aktywnego dopytywania”  oraz rekomendacja, żeby `ID-T = 01` służył doprecyzowaniu `additional-contexts.md` i przygotowaniu planu, są opisane w** `agents-tasks-knowledge/tasks/GEMINI.md`, sekcja „3. Wypełnianie \`additional-contexts.md\` (opis biznesowy, forma BA)”.
+    - `additional-contexts.md` – rozszerzony opis tła zadania (najczęściej opis zrobiony przez analityka biznesowego: oczekiwania klienta, opis funkcjonalności prozą; można tu wkleić opis np. z Jiry). **Kanoniczny szablon tego pliku, podział ról BA / agenta, zasady trybu „aktywnego dopytywania”  oraz rekomendacja, żeby `ID-T = 01` służył doprecyzowaniu `additional-contexts.md` i przygotowaniu planu, są opisane w** `agents-tasks-knowledge/tasks/CLAUDE.md`, sekcja „3. Wypełnianie \`additional-contexts.md\` (opis biznesowy, forma BA)”.
     - `tasks.md` – plan wykonawczy rozbijający cel na kroki i pod‑kroki. Zawiera kolumny:
         1. `ID-T` – numer zadania lub pod‑zadania (krok w planie),
         2. `Status` – aktualny status zadania, z możliwymi wartościami [możliwe statusy](#files-statuses),
@@ -59,6 +59,7 @@
           - zadanie jest bardziej złożone,
           - informacji jest za dużo dla kolumny `Opis` / `Co zrobiono do tej pory`,
           - chcesz dołączyć np. zrzuty ekranów lub inne binarki.
+      - Procedura audytu template'ow `.j2` (zakres + subagenci + Claude + Gemini) jest opisana w `agents-tasks-knowledge/tasks/CLAUDE.md`, sekcja „3.4. Audyt template'ow `.j2` (zakres i procedura)”.
 
 Bootstrap task generowany przy inicjalizacji workspace zawiera automatycznie wygenerowane subtaski audytu instrukcji (`AGENTS/CLAUDE/GEMINI.md`) dla oczekiwanych ścieżek.
 
@@ -106,7 +107,7 @@ agents-tasks-knowledge/tasks/
     250115-bug-fix_done/
   250201-current-task_in-progress/
 ```
- 
+
 Zasady:
 
 * Agent **nie przenosi** katalogów sam – robi to właściciel albo skrypt CI.
@@ -193,7 +194,7 @@ Zasady:
 
 ## Multi‑agent: `AGENT_ID` i pliki `SESSION_<AGENT_ID>.md`
 
-System obsługuje wielu równoległych agentów technicznych (np. osobny agent dla backendu, osobny dla GUI).  
+System obsługuje wielu równoległych agentów technicznych (np. osobny agent dla backendu, osobny dla GUI).
 Każdy taki agent ma stabilny identyfikator `AGENT_ID`, np.:
 
 - `api-1`, `api-2` – backend,
@@ -417,13 +418,13 @@ Jeśli tak – przyjmij tę wartość `AGENT_ID` i przejdź do sekcji „Pierwsz
 0. Jeżeli w pierwszej wiadomości w tej rozmowie użytkownik **prosi o założenie nowego zadania w `tasks/`**
    (np. „załóżmy nowe zadanie dla …”, „pomóż mi założyć nowe zadanie w `tasks/`”, „chcę nowy katalog zadania”):
     - **ignoruj w tej sesji** `SESSION.md` oraz algorytm wyboru istniejącego zadania,
-    - potraktuj tę prośbę jako wejście w „happy path” z `agents-tasks-knowledge/tasks/GEMINI.md`, sekcja „9. Flow właściciel ↔ agent”,
+    - potraktuj tę prośbę jako wejście w „happy path” z `agents-tasks-knowledge/tasks/CLAUDE.md`, sekcja „9. Flow właściciel ↔ agent”,
     - poprowadź właściciela **krok po kroku w rozmowie** (kopiowanie katalogu, nazwa `<ID-Z>_proposal`, wypełnienie `additional-contexts.md`, ustawienie `tasks.md` i `SESSION.md`),
-    - sam plik `agents-tasks-knowledge/tasks/GEMINI.md` traktuj jako referencję w tle, a nie coś, co użytkownik musi czytać, żeby ruszyć dalej.
+    - sam plik `agents-tasks-knowledge/tasks/CLAUDE.md` traktuj jako referencję w tle, a nie coś, co użytkownik musi czytać, żeby ruszyć dalej.
 
 
 1. Jeśli w tej rozmowie użytkownik **wprost zaznaczył**, że chodzi tylko o jednorazową analizę /
-   wyjaśnienie bez zmian w repo (patrz TL;DR i główny `GEMINI.md`):
+   wyjaśnienie bez zmian w repo (patrz TL;DR i główny `CLAUDE.md`):
 
     - **nie** korzystaj z `SESSION.md`,
     - **nie** skanuj `tasks/`,
@@ -510,11 +511,11 @@ W kolejnych sesjach domyślnie wracasz do tego samego katalogu `<ID-Z>_<status>/
     * jeżeli plan tworzysz od zera, a w `tasks.md` nie ma jeszcze wiersza `ID-T = 01` opisującego
       „Doprecyzowanie i uzupełnienie additional-contexts.md + przygotowanie planu technicznego”,
       zaproponuj właścicielowi dodanie takiego wiersza jako **pierwszego kroku**,
-   
+
     > Jeżeli właściciel zadania poprosi o tryb „aktywnego dopytywania”,
     > (np. wpisze to w sekcji 6 `additional-contexts.md` albo wprost w rozmowie),
     > najpierw zbuduj listę pytań do sekcji 6 zgodnie z zasadami z
-    > `agents-tasks-knowledge/tasks/GEMINI.md`, sekcja „3.3. Tryb „aktywnego dopytywania” przez Agenta”,
+    > `agents-tasks-knowledge/tasks/CLAUDE.md`, sekcja „3.3. Tryb „aktywnego dopytywania” przez Agenta”,
     > a dopiero po odpowiedziach proponuj szczegółowy plan w `tasks.md`.
 
     * podziel zadanie na logiczne kroki, które prowadzą do realizacji celu – plan powinien być spójny i wynikać z poprzednich kroków i analiz,
@@ -547,7 +548,6 @@ W trybie planowania „rozmowa” ma doprowadzić do **decision-complete** specy
 
 - **Reguła finalizacji:**
   finalizuj plan w `tasks.md` dopiero, gdy pozostałe niewiadome mają niski wpływ i są jawnie wpisane jako **założenia** / **otwarte pytania** (np. w `additional-contexts.md`).
-
 
 ### Checklista trybu planowania (wirtualna; zawsze przed wyjściem z planu)
 
@@ -646,7 +646,7 @@ Jeśli zadanie ma charakter wyłącznie analityczny (np. doprecyzowanie wymagań
 
     * dziel zadanie na mniejsze kroki (pod‑zadania w `tasks.md`), jeśli jest zbyt duże lub skomplikowane,
     * regularnie zapisuj postęp w `Co zrobiono do tej pory` i każdorazowo aktualizuj `Zaktualizowano`,
-    * uruchamiaj odpowiednie testy przez `make` (szczegóły w lokalnych `GEMINI.md` dla komponentów, jeśli istnieją); jeśli test nie istnieje, zaproponuj jego dopisanie,
+    * uruchamiaj odpowiednie testy przez `make` (szczegóły w lokalnych `CLAUDE.md` dla komponentów, jeśli istnieją); jeśli test nie istnieje, zaproponuj jego dopisanie,
     * jeśli napotkasz problemy – analizuj je i proponuj rozwiązania właścicielowi zadania,
     * konsultuj się z właścicielem zadania, gdy potrzebujesz decyzji lub priorytetyzacji.
 
@@ -719,7 +719,7 @@ Po PASS wpisz nazwy raportów w `tasks.md` i odhacz checklistę „przed done”
 
 ## Narzędzia, z których możesz korzystać podczas realizacji (w pierwszej kolejności)
 
-* `Makefile` w repozytoriach komponentów (np. `ut-angular`),
+* `Makefile` w repozytoriach komponentów (np. `gui`),
 * serwer MCP `playwright` – szczególnie przy pracy z GUI,
 * serwer MCP `chrome-devtools` – logi przeglądarki / network dla GUI.
 
@@ -757,10 +757,10 @@ Przed zakończeniem sesji nad zadaniem z `tasks/` sprawdź:
 
 ## Przykład `tasks.md` + `additional-notes/01.md` – PRZED i PO
 
-Ten przykład pokazuje **tylko** różnicę w sposobie użycia HANDOFF i `additional-notes/`.  
+Ten przykład pokazuje **tylko** różnicę w sposobie użycia HANDOFF i `additional-notes/`.
 Zakładamy już, że zadanie zostało założone zgodnie z zasadą, że `ID-T = 01` służy
 doprecyzowaniu `additional-contexts.md` i przygotowaniu planu technicznego
-(patrz `agents-tasks-knowledge/tasks/GEMINI.md`, sekcja „4.2. Jak numerować `ID-T`”).
+(patrz `agents-tasks-knowledge/tasks/CLAUDE.md`, sekcja „4.2. Jak numerować `ID-T`”).
 
 ### „PRZED” (obecny stan – brak jasnego flow)
 
@@ -843,4 +843,4 @@ Teraz:
     * znaleźć `[HANDOFF: 02, 03]` przy 01 w `tasks.md`,
     * przeczytać sekcję „Wnioski dla kolejnych kroków” w `additional-notes/01.md`.
 * Agent startujący w 02/03 **loguje wprost** w `Co zrobiono do tej pory`, że korzystał z HANDOFF‑u z 01.
-* Przykład jest w pełni spójny z zasadą `ID-T = 01` z pliku `tasks/GEMINI.md`.
+* Przykład jest w pełni spójny z zasadą `ID-T = 01` z pliku `tasks/CLAUDE.md`.

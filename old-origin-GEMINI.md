@@ -11,7 +11,7 @@
 ### Komponenty (enabled)
 | ID | Katalog | Stack / typ | Instrukcje |
 |----|---------|-------------|------------|
-| `gui` | `ut-angular` | angular x.y | `ut-angular/AGENTS.md` |
+| `gui` | `gui` | angular x.y | `gui/GEMINI.md` |
 
 
 > **Wersja systemu:** 1.1.0 (2025-12-19)
@@ -35,7 +35,7 @@
 1. **Język i rola** – odpowiadaj po polsku, bądź konkretny, opieraj się na plikach z repo, nie wymyślaj rzeczy, których nie widzisz w kodzie.
 2. **Decyzja: ad‑hoc vs. system zadań**
     - jeśli użytkownik wprost pisze, że chodzi o jednorazową analizę / konsultację, pracujesz ad‑hoc i **nie** dotykasz `agents-tasks-knowledge/` (patrz też pkt 2.9),
-    - w pozostałych przypadkach **domyślnie** korzystasz z systemu zadań: `agents-tasks-knowledge/AGENTS.md`, `SESSION*.md`, `tasks/`.
+    - w pozostałych przypadkach **domyślnie** korzystasz z systemu zadań: `agents-tasks-knowledge/GEMINI.md`, `SESSION*.md`, `tasks/`.
     - jeśli w repo istnieje `CONTINUITY.md`, to przy pytaniach o status łączysz go z `SESSION*.md` (o ile istnieją) i odpowiednim `tasks.md`.
 3. **Brak zmian bez zadania** – każdą konkretną zmianę w repo (diffy, migracje, komendy modyfikujące stan) wiążesz z konkretnym katalogiem z `tasks/` i `ID-T` w jego `tasks.md` (chyba że jesteś w trybie jednorazowej analizy z pkt 2.9).
 
@@ -70,30 +70,30 @@ Jesli audyt ma uwagi:
 Wyjatek od tej bramki wymaga **jawnej zgody wlasciciela** i wpisu w `additional-contexts.md` (kto zatwierdzil + zakres + ryzyko).
 ## 1. Jak Agent czyta instrukcje i jak interpretować konflikty
 
-1. Agent buduje łańcuch instrukcji z plików user-owned (`AGENTS.md`, a dla innych klientów odpowiednio `CLAUDE.md` / `GEMINI.md`):
-    - globalne (`~/.Agent/AGENTS.md`),
+1. Agent buduje łańcuch instrukcji z plików user-owned (`GEMINI.md`, a dla innych klientów odpowiednio `AGENTS.md` / `CLAUDE.md`):
+    - globalne (`~/.Agent/GEMINI.md`),
     - projektowe – od katalogu głównego repo do katalogu, w którym pracujesz.
    Pliki generowane przez generator służą jako źródło do odświeżenia user-owned; nie są czytane automatycznie przez agenta.
 2. Na poziomie **tego repozytorium** przyjmij następującą logikę:
 
     1. Instrukcje systemowe / execpolicy / ustawienia Agent – poza Twoją kontrolą, ale zawsze obowiązują.
-    2. Ten plik `AGENTS.md` w katalogu głównym repo – ogólne zasady, bezpieczeństwo, proces zadań.
-    3. `agents-tasks-knowledge/AGENTS.md` – definicje statusów, ogólne zasady pracy na `tasks/` i `ideas/`.
-    4. `agents-tasks-knowledge/tasks/AGENTS.md` – szczegółowy proces tworzenia nowych katalogów z zadaniami, rola właściciela (BA) oraz twarda zasada, że `ID-T = 01` służy doprecyzowaniu `additional-contexts.md` i przygotowaniu planu.
-    5. Specyficzne pliki `AGENTS.md` w podkatalogach:
+    2. Ten plik `GEMINI.md` w katalogu głównym repo – ogólne zasady, bezpieczeństwo, proces zadań.
+    3. `agents-tasks-knowledge/GEMINI.md` – definicje statusów, ogólne zasady pracy na `tasks/` i `ideas/`.
+    4. `agents-tasks-knowledge/tasks/GEMINI.md` – szczegółowy proces tworzenia nowych katalogów z zadaniami, rola właściciela (BA) oraz twarda zasada, że `ID-T = 01` służy doprecyzowaniu `additional-contexts.md` i przygotowaniu planu.
+    5. Specyficzne pliki `GEMINI.md` w podkatalogach:
 
-        - `ut-angular/AGENTS.md` – wytyczne dla komponentu `frontend (Angular)`,
+        - `gui/GEMINI.md` – wytyczne dla komponentu `frontend (Angular)`,
         - ewentualne inne `AGENTS*.md` bliżej edytowanego pliku.
     6. Im bliżej katalogu z edytowanym plikiem, tym **ważniejsze** są te instrukcje.
     7. **Priorytet numeryczny w razie konfliktu (od najwyższego do najniższego):**
        1. Instrukcje systemowe / execpolicy / ustawienia Agenta (sandbox, bezpieczeństwo).
        2. Instrukcje użytkownika w bieżącej rozmowie – co do celu („co” ma być zrobione),
           o ile nie łamią zasad bezpieczeństwa z pkt 1.
-       3. `AGENTS.md` w katalogu edytowanego pliku (np. `ut-angular/AGENTS.md`).
-       4. `agents-tasks-knowledge/tasks/AGENTS.md` – proces dla katalogów w `tasks/`.
-       5. `agents-tasks-knowledge/AGENTS.md` – definicje statusów, zasady `SESSION*.md`, HANDOFF.
-       6. Ten plik (`AGENTS.md` w root repo).
-       7. Globalne `~/.Agent/AGENTS.md` (poza kontrolą projektu, najniższy priorytet).
+       3. `GEMINI.md` w katalogu edytowanego pliku (np. `gui/GEMINI.md`).
+       4. `agents-tasks-knowledge/tasks/GEMINI.md` – proces dla katalogów w `tasks/`.
+       5. `agents-tasks-knowledge/GEMINI.md` – definicje statusów, zasady `SESSION*.md`, HANDOFF.
+       6. Ten plik (`GEMINI.md` w root repo).
+       7. Globalne `~/.Agent/GEMINI.md` (poza kontrolą projektu, najniższy priorytet).
 
        Przy konfliktach **na tym samym poziomie priorytetu** stosuj zasadę
        „bliższy katalog wygrywa” z pkt 6 powyżej i opisz swój wybór w odpowiedzi.
@@ -116,35 +116,35 @@ Wyjatek od tej bramki wymaga **jawnej zgody wlasciciela** i wpisu w `additional-
 ## 2. Zasady pracy z zadaniami (`agents-tasks-knowledge`)
 
 0. Jeśli jako właściciel chcesz **założyć nowe zadanie od zera** i być prowadzony „za rękę”, zacznij od pliku
-   `agents-tasks-knowledge/tasks/AGENTS.md`, sekcje:
+   `agents-tasks-knowledge/tasks/GEMINI.md`, sekcje:
    - `0. Szybki start dla właściciela zadania (BA)`,
    - `9. Flow właściciel ↔ agent`.
-   Tam jest opisany pełny „happy path” od pomysłu do pierwszej sesji agenta dla `<ID-Z>_proposal`.
-   Jako agent, gdy w rozmowie użytkownik napisze coś w stylu „załóżmy nowe zadanie dla ...” albo „pomóż mi założyć nowe zadanie w `tasks/`”,
-   traktuj to tak, jakby właśnie poprosił o przejście przez ten „happy path”.
+   Tam jest opisany pełny „happy path” od pomysłu do pierwszej sesji agenta dla `<ID-Z>_proposal`. 
+   Jako agent, gdy w rozmowie użytkownik napisze coś w stylu „załóżmy nowe zadanie dla ...” albo „pomóż mi założyć nowe zadanie w `tasks/`”, 
+   traktuj to tak, jakby właśnie poprosił o przejście przez ten „happy path”.  
    **Nie odsyłaj go tylko do pliku.** Zamiast tego, krok po kroku:
      - streszczaj mu, co ma fizycznie zrobić w repo (skopiowanie katalogu, nazwa `<ID-Z>_proposal`, wypełnienie `additional-contexts.md`, ustawienie `SESSION.md`),
      - podawaj dokładne ścieżki / komendy,
-   - dopiero na końcu, jeśli chce szczegóły, wskaż odpowiednie sekcje `agents-tasks-knowledge/tasks/AGENTS.md` jako referencję.
+   - dopiero na końcu, jeśli chce szczegóły, wskaż odpowiednie sekcje `agents-tasks-knowledge/tasks/GEMINI.md` jako referencję.
 
 1. Źródłem prawdy o stanie prac są katalogi w `agents-tasks-knowledge/tasks/` i powiązane pliki:
     - `additional-contexts.md`,
     - `tasks.md`,
     - pliki w `additional-notes/`.
 2. Szczegółowe zasady i definicje statusów (`proposal`, `to-do`, `planning`, `planned`, `in-progress`, `on-hold`, `done`) znajdziesz w:
-    - `agents-tasks-knowledge/AGENTS.md` (sekcja „Files statuses”),
-    - `agents-tasks-knowledge/tasks/AGENTS.md` (proces tworzenia nowych zadań).
+    - `agents-tasks-knowledge/GEMINI.md` (sekcja „Files statuses”),
+    - `agents-tasks-knowledge/tasks/GEMINI.md` (proces tworzenia nowych zadań).
 3. Struktura i sposób użycia `additional-contexts.md` (w tym szablon BA, tryb „aktywnego dopytywania”, w którym właściciel wypełnia głównie sekcję
    „Surowe dane”, a agent aktywnie dopytuje o resztę, **oraz zasada, że pierwsze zadanie `ID-T = 01`
    służy doprecyzowaniu `additional-contexts.md` i przygotowaniu planu**) są opisane kanonicznie w
-   `agents-tasks-knowledge/tasks/AGENTS.md`, sekcja „3. Wypełnianie `additional-contexts.md`
+   `agents-tasks-knowledge/tasks/GEMINI.md`, sekcja „3. Wypełnianie `additional-contexts.md`
    (opis biznesowy, forma BA)”.
 4. Zanim zaproponujesz **konkretną zmianę plików w repozytorium**
    (np. w formie patcha/diffu, migracji, komendy, która modyfikuje bazę danych lub konfigurację):
    - znajdź aktywne zadanie (`<ID-Z>_<status>/` z `status` innym niż `done` / `on-hold`),
    - przeczytaj jego `additional-contexts.md` i `tasks.md`,
    - ustal, które `ID-T` jest **następnym logicznym krokiem** i pracuj w jego kontekście.
-
+     
    Wyjątek: jeżeli w tej rozmowie pracujesz w trybie jednorazowej analizy opisanym w pkt 2.9
      (bez bezpośrednich zmian w repozytorium), możesz pominąć ten krok i po prostu odpowiedzieć
      na pytanie użytkownika.
@@ -184,17 +184,17 @@ Wyjatek od tej bramki wymaga **jawnej zgody wlasciciela** i wpisu w `additional-
 
 9. Jeśli właściciel repozytorium prosi tylko o jednorazową analizę / wyjaśnienie **albo o przykładowy kod „na tablicy”, który nie jest proponowany jako bezpośrednia zmiana plików w repo**:
    - możesz odpowiedzieć ad‑hoc **bez** tworzenia nowego zadania,
-   - jeśli z analizy wynika potrzeba dalszych prac – zaproponuj utworzenie zadania zgodnie z `agents-tasks-knowledge/tasks/AGENTS.md`.
-
+   - jeśli z analizy wynika potrzeba dalszych prac – zaproponuj utworzenie zadania zgodnie z `agents-tasks-knowledge/tasks/GEMINI.md`.
+   
 10. System zadań jest przygotowany na pracę wielu agentów równolegle:
     - kolumna `Agent` w `tasks.md` wskazuje właściciela danego wiersza (np. `api-1`, `gui-1`, `ba`, `human-pm`),
     - dla każdego agenta technicznego możesz utrzymywać osobny wskaźnik sesji `SESSION_<AGENT_ID>.md` o tym samym formacie, co `SESSION.md`,
-    - szczegółowe zasady są opisane w `agents-tasks-knowledge/AGENTS.md`, sekcja „Multi‑agent (AGENT_ID i kolumna `Agent`)” oraz „Multi‑agent: `AGENT_ID` i pliki `SESSION_<AGENT_ID>.md`”.
+    - szczegółowe zasady są opisane w `agents-tasks-knowledge/GEMINI.md`, sekcja „Multi‑agent (AGENT_ID i kolumna `Agent`)” oraz „Multi‑agent: `AGENT_ID` i pliki `SESSION_<AGENT_ID>.md`”.
 
 >Agenci techniczni (np. `api-1`, `gui-1`) w trybie multi‑agent **nie modyfikują**
 >globalnego `agents-tasks-knowledge/SESSION.md`. Aktualizują wyłącznie swoje pliki
 >`agents-tasks-knowledge/SESSION_<AGENT_ID>.md` zgodnie z zasadami z
->`agents-tasks-knowledge/AGENTS.md`.
+>`agents-tasks-knowledge/GEMINI.md`.
 
 
 Prośba o założenie nowego zadania traktuj jako **nowy nadrzędny cel** – nawet jeśli `SESSION.md` wskazuje inne zadanie, w tej sesji priorytet ma nowe `<ID-Z>_proposal` (opisz to właścicielowi i wpisz nową zawartość `SESSION.md`).
@@ -204,7 +204,7 @@ Prośba o założenie nowego zadania traktuj jako **nowy nadrzędny cel** – na
 ## 3. Styl pracy i minimalizowanie halucynacji
 
 1. Zawsze opieraj się na realnych plikach:
-    - cytuj ścieżki (`ut-angular/src/app/...`, `agents-tasks-knowledge/...`),
+    - cytuj ścieżki (`gui/src/app/...`, `agents-tasks-knowledge/...`),
     - pokazuj krótkie fragmenty kodu zamiast wymyślać abstrakcyjne przykłady.
 2. Jeśli czegoś **nie ma** w repo (brak pliku, brak skryptu, brak migracji):
     - powiedz to wprost,
@@ -228,7 +228,7 @@ Prośba o założenie nowego zadania traktuj jako **nowy nadrzędny cel** – na
     - opisz spodziewany efekt i ryzyko.
 
 2. Preferuj istniejące mechanizmy projektu:
-    - frontend – komendy `make` / `npm` zdefiniowane w `ut-angular/`.
+    - frontend – komendy `make` / `npm` zdefiniowane w `gui/`.
     - zanim zaproponujesz „gołe” `docker compose`, `phpunit`, `ng serve` itd. – sprawdź, czy nie ma odpowiedniego celu w `Makefile` / `package.json`.
 
 3. Zanim zaproponujesz nową bibliotekę / framework:
@@ -254,7 +254,7 @@ Prośba o założenie nowego zadania traktuj jako **nowy nadrzędny cel** – na
 ## 5. Jak proponować zmiany w kodzie
 
 1. Zawsze wskazuj **konkretne ścieżki plików**:
-    - frontend: `ut-angular/src/app/...`, `ut-angular/src/assets/...`,
+    - frontend: `gui/src/app/...`, `gui/src/assets/...`,
     - zadania: `agents-tasks-knowledge/tasks/<ID-Z>_<status>/tasks.md` itp.
 
 2. Preferowany format zmian:
@@ -277,7 +277,7 @@ Prośba o założenie nowego zadania traktuj jako **nowy nadrzędny cel** – na
 
 3. Po każdej propozycji zmian zaproponuj **konkretne testy** do odpalenia:
     - frontend:
-        - odpowiednie skrypty `npm` (`npm test`, `npm run lint`, e2e), według `ut-angular/package.json`.
+        - odpowiednie skrypty `npm` (`npm test`, `npm run lint`, e2e), według `gui/package.json`.
 
 4. Przy zmianach wielowarstwowych (np. nowy feature od bazy po GUI):
     - rozbij to na kilka `ID-T` w `tasks.md`,

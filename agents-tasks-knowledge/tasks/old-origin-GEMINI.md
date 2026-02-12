@@ -52,7 +52,6 @@ Katalog `template-task_proposal/` jest bazowym szablonem do kopiowania. Katalog�
 Dodatkowo istnieją template’y:
 - `template-workspace-bootstrap_proposal/` – „pierwszy task” po inicjalizacji workspace (używany automatycznie przez `render.py --mode init --create-bootstrap-task`). Zawiera automatycznie wygenerowane subtaski audytu instrukcji (`AGENTS/CLAUDE/GEMINI.md`).
 - `template-workspace-sync-audit_proposal/` – task audytu instrukcji po `render.py --mode sync`, tworzony tylko gdy wykryto różnice `old-origin-*` vs `origin-*`; katalog taska ma status `_in-progress`.
-Dla jasności: `template-workspace-bootstrap_proposal/` i `template-workspace-sync-audit_proposal/` **nie są kopiowane** do `agents-tasks-knowledge/tasks/`. Są źródłami w `framework/task-templates/` (upstream) i ich kopie trafiają do `agents-tasks-knowledge/.tooling/task-templates/`, skąd narzędzia tworzą realne taski w `tasks/`.
 Dla zwykłych zadań produktowych nadal używaj `template-task_proposal/`.
 
 Przykład nowego katalogu:
@@ -62,7 +61,7 @@ Przykład nowego katalogu:
 Nazwa katalogu:
 
 - `230101-feature-employee-reports` – dowolny identyfikator (np. data + krótki opis),
-- `_proposal` – startowy status zadania (`proposal`, `to-do`, `planning`, `planned`, `in-progress`, `on-hold`, `done` – patrz definicje w `CLAUDE.md` w katalogu `agents-tasks-knowledge/`).
+- `_proposal` – startowy status zadania (`proposal`, `to-do`, `planning`, `planned`, `in-progress`, `on-hold`, `done` – patrz definicje w `GEMINI.md` w katalogu `agents-tasks-knowledge/`).
 
 W nowym katalogu powinny być:
 
@@ -191,7 +190,7 @@ _Tu lądują ważniejsze decyzje z historii czatu, w formie timeline'u._
 _Zwięzłe podsumowanie, które jest mostem do `tasks.md`:_
 
 - Backend (frontend-only-api): ...
-- GUI (ut-angular): ...
+- GUI (gui): ...
 - Dane / migracje: ...
 - Testy / kryteria DONE: ...
 
@@ -251,26 +250,7 @@ Dodatkowo:
   4) Po 3 iteracjach lub 2h (jeśli nadal P1/P0 lub brak decyzji) -> `*-audit-blockers.md` + `[BLOCKER]` w `tasks.md` + eskalacja do właściciela.
 - **Context7:** jeśli plan opiera się o zewnętrzne biblioteki/API, zweryfikuj aktualną dokumentację w Context7.
 
-3. Najpierw zbudować listę pytań do sekcji 6, pogrupowanych tematycznie, np.:
-
-    * Użytkownicy / role – kto dokładnie i w jakich sytuacjach?
-    * Zakres / poza zakresem – czego na pewno nie robimy w tym zadaniu?
-    * Proces / scenariusze – jak wygląda „happy path”, a jak scenariusze wyjątkowe?
-    * Dane – jakie pola są wymagane, skąd pochodzą, gdzie są zapisywane?
-    * Ograniczenia / ryzyka – co może zablokować wdrożenie, na czym nie możemy eksperymentować?
-    * Definicja sukcesu / DONE – po czym poznamy, że biznesowo zadanie jest zakończone?
-4. Wpisać te pytania do sekcji 6 w formie checklisty:
-
-    * `- [ ] P1: ...`,
-    * `- [ ] P2: ...`.
-5. Dopiero po uzyskaniu odpowiedzi od właściciela:
-
-    * zaproponować uzupełnienie lub korektę sekcji 2–5 oraz 7–8,
-    * na tej podstawie zaproponować plan w `tasks.md` (ID‑T, statusy, HANDOFFy).
-
-Agent powinien wprost komunikować w odpowiedzi, że pracuje w trybie „aktywnego dopytywania”.
-
-### 3.3. Audyt końcowy (final-audit) przed `done`
+### 3.4. Audyt końcowy (final-audit) przed `done`
 
 Final‑audit to **symetryczny** proces do plan‑audit, uruchamiany **przed** zamknięciem taska. Różnica dotyczy etapu (zamknięcie) i nazewnictwa raportów.
 
@@ -308,46 +288,24 @@ Final‑audit to **symetryczny** proces do plan‑audit, uruchamiany **przed** z
 - Findings P0/P1/P2 + rekomendacje,
 - Werdykt PASS/FAIL + next steps.
 
-### 3.4. Audyt template'ow `.j2` (zakres i procedura)
+3. Najpierw zbudować listę pytań do sekcji 6, pogrupowanych tematycznie, np.:
 
-Gdy zadanie dotyczy audytu template'ow `.j2`, stosuj ponizszy **zakres etapowy**, checklisty i procedure audytu subagentow + Claude.
+    * Użytkownicy / role – kto dokładnie i w jakich sytuacjach?
+    * Zakres / poza zakresem – czego na pewno nie robimy w tym zadaniu?
+    * Proces / scenariusze – jak wygląda „happy path”, a jak scenariusze wyjątkowe?
+    * Dane – jakie pola są wymagane, skąd pochodzą, gdzie są zapisywane?
+    * Ograniczenia / ryzyka – co może zablokować wdrożenie, na czym nie możemy eksperymentować?
+    * Definicja sukcesu / DONE – po czym poznamy, że biznesowo zadanie jest zakończone?
+4. Wpisać te pytania do sekcji 6 w formie checklisty:
 
-**Zakres etapowy:**
-- **Etap 1 (podzbior kluczowy):** instrukcje/README/AGENT_PROFILES oraz kategorie `agents-tasks-knowledge/`, `repo/`, `root/`, `backend/`, `frontend/`, `nx/`, `scripts/`, warianty `legacy-*`.
-- **Etap 2 (reszta):** tylko po decyzji wlasciciela **lub** jesli etap 1 ujawni rozbieznosci wymagajace weryfikacji snippetow.
+    * `- [ ] P1: ...`,
+    * `- [ ] P2: ...`.
+5. Dopiero po uzyskaniu odpowiedzi od właściciela:
 
-**Checklisty audytu `.j2` (skrot):**
-1) Zakres i mapowanie: plik jest w etapie 1/2, wiadomo gdzie jest renderowany, brak „sierot” bez opisu.  
-2) Spojnosc tresci: brak sprzecznosci z root/`agents-tasks-knowledge`, legacy vs new bez konfliktow.  
-3) Placeholdery/konfiguracja: brak niezdefiniowanych zmiennych Jinja; nowe pola maja `|default(...)` lub walidacje.  
-4) Bezpieczenstwo: brak destrukcyjnych komend bez ostrzezen i zakresu srodowiska.  
-5) Workflow + HANDOFF: zgodnosc statusow/kolumn/daty/SESSION; wymagane markery HANDOFF obecne w `tasks.md`.  
-6) Linki i format: poprawne linki wzgledne, spójny format i jezyk.  
+    * zaproponować uzupełnienie lub korektę sekcji 2–5 oraz 7–8,
+    * na tej podstawie zaproponować plan w `tasks.md` (ID‑T, statusy, HANDOFFy).
 
-**Procedura subagentow + Claude + Gemini:**
-- Uruchom **równolegle** (wspólny `<TS>`) 2 subagentów + Claude + Gemini; syntezę wykonaj dopiero po komplecie 4 raportów.
-- Uruchom **2 niezalezne subagenty** z tym samym promptem audytu; raporty zapisz w `additional-notes/<TS>-plan-audit-subagent-*.md`.
-- Uruchom Claude **bezpośrednio** (nie używaj `script`/`tee`/`nohup`/`&`):  
-  `claude -p "$(cat /tmp/final_audit_prompt.txt)"`  
-  *W treści promptu wskaż docelowy plik: `additional-notes/<TS>-plan-audit-claude.md` (wynik ma być gotowy do wklejenia).*  
-  i **monitoruj co 1 minute** (status subagentow + proces Claude).
-- Uruchom Gemini:
-  `gemini --yolo "$(cat /tmp/final_audit_prompt.txt)"` (bez `script`/`tee`/`nohup`/`&`)  
-  i zapisz raport w `additional-notes/<TS>-plan-audit-gemini.md` (np. copy/paste).
-  *W treści promptu wskaż docelowy plik: `additional-notes/<TS>-plan-audit-gemini.md` (wynik ma być gotowy do wklejenia).*
-- **Brak timeoutu:** nie ustawiaj twardego limitu czasu procesu.
-- **Monitoring:** co 1 minutę sprawdzaj status/PID i czy przybywa outputu.
-- **Bezczynność:** jeśli przez 30 min brak nowego outputu -> zatrzymaj proces i zastosuj fallback (raport braku + `*-audit-blockers.md` + decyzja właściciela); bez auto-PASS.
-- **Fallback Claude:** jesli niedostepny/timeout -> utworz `additional-notes/<TS>-plan-audit-claude.md` z informacja o braku oraz `additional-notes/<TS>-audit-blockers.md`; **nie zamykaj** `ID-T=01` bez decyzji wlasciciela.
-- **Fallback Gemini:** jesli niedostepny/timeout -> utworz `additional-notes/<TS>-plan-audit-gemini.md` z informacja o braku oraz `additional-notes/<TS>-audit-blockers.md`; **nie zamykaj** `ID-T=01` bez decyzji wlasciciela.
-- **Tryb automatyczny/autonomiczny:** minimalne interakcje, wybory „pro” bez przerostu.
-
-**Format raportu (minimalny):**
-- Naglowek: data/czas, zakres, lista audytowanych `.j2`.
-- Findings: P0/P1/P2 z plikami i rekomendacjami.
-- Ryzyka/uwagi + Werdykt PASS/FAIL + Nastepne kroki.
-
-`<TS>` = `YYYYMMDD-HHMM` (czas lokalny).
+Agent powinien wprost komunikować w odpowiedzi, że pracuje w trybie „aktywnego dopytywania”.
 
 ## 4. Wypełnianie `tasks.md` – pierwszy szkic planu
 
@@ -356,7 +314,7 @@ W `tasks.md` tworzysz **tabelę kroków**. Każdy wiersz to zadanie (`ID-T`).
 ### 4.1. Minimalne kolumny (przypomnienie)
 
 - `ID-T` – numer zadania / pod‑zadania (np. `01`, `01-01`, `01-02`),
-- `Status` – wg sekcji „Files statuses” w `CLAUDE.md` w katalogu `agents-tasks-knowledge/`,
+- `Status` – wg sekcji „Files statuses” w `GEMINI.md` w katalogu `agents-tasks-knowledge/`,
 - `Agent` – identyfikator agenta lub osoby, która jest „właścicielem” wiersza (np. `api-1`, `gui-1`, `ba`, `human-pm`). W trybie multi‑agent techniczne agenty biorą **tylko** wiersze z `Agent = ich AGENT_ID` lub z pustym `Agent` (który przy starcie pracy uzupełniają).
 - `Rodzic` – `ID-T` zadania nadrzędnego (dla pod‑zadań),
 - `Zadanie` – krótki, konkretny opis,
@@ -391,7 +349,7 @@ Przykładowy nagłówek tabeli w `tasks.md` (Markdown):
 Uwaga dla starszych zadań: w niektórych istniejących katalogach możesz spotkać `ID-T = 01`
 o innej nazwie (np. „Analiza raportów VAT”) – to zadania sprzed wprowadzenia tej zasady.
 **Nie zmieniaj im numerów** (historia ma pozostać odtwarzalna); traktuj je jak odpowiednik `01-01`
-w nowym schemacie.
+w nowym schemacie.  
 Nowe zadania zakładaj już zgodnie z powyższą zasadą (`01` = doprecyzowanie `additional-contexts.md` + plan).
 
 Przykład:
@@ -496,7 +454,7 @@ Przy tworzeniu pierwszego szkicu `tasks.md`:
 Agent, który będzie realizował później krok `02` albo `03-01`, ma obowiązek:
 
 - sprawdzić wcześniejsze wiersze w `tasks.md` pod kątem `[HANDOFF: <jego ID-T>]`,
-- przeczytać odpowiednie sekcje w `additional-notes/<ID-T-kontekstu>.md` zgodnie z głównym `CLAUDE.md`.
+- przeczytać odpowiednie sekcje w `additional-notes/<ID-T-kontekstu>.md` zgodnie z głównym `GEMINI.md`.
 
 ## 9. Flow właściciel ↔ agent (agent CLI – np. codex-cli, Claude Code, Gemini CLI)
 

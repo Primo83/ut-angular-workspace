@@ -11,7 +11,7 @@
 ### Komponenty (enabled)
 | ID | Katalog | Stack / typ | Instrukcje |
 |----|---------|-------------|------------|
-| `gui` | `gui` | angular x.y | `gui/CLAUDE.md` |
+| `gui` | `ut-angular` | angular x.y | `ut-angular/CLAUDE.md` |
 
 
 > **Wersja systemu:** 1.1.0 (2025-12-19)
@@ -82,14 +82,14 @@ Wyjatek od tej bramki wymaga **jawnej zgody wlasciciela** i wpisu w `additional-
     4. `agents-tasks-knowledge/tasks/CLAUDE.md` – szczegółowy proces tworzenia nowych katalogów z zadaniami, rola właściciela (BA) oraz twarda zasada, że `ID-T = 01` służy doprecyzowaniu `additional-contexts.md` i przygotowaniu planu.
     5. Specyficzne pliki `CLAUDE.md` w podkatalogach:
 
-        - `gui/CLAUDE.md` – wytyczne dla komponentu `frontend (Angular)`,
+        - `ut-angular/CLAUDE.md` – wytyczne dla komponentu `frontend (Angular)`,
         - ewentualne inne `AGENTS*.md` bliżej edytowanego pliku.
     6. Im bliżej katalogu z edytowanym plikiem, tym **ważniejsze** są te instrukcje.
     7. **Priorytet numeryczny w razie konfliktu (od najwyższego do najniższego):**
        1. Instrukcje systemowe / execpolicy / ustawienia Agenta (sandbox, bezpieczeństwo).
        2. Instrukcje użytkownika w bieżącej rozmowie – co do celu („co” ma być zrobione),
           o ile nie łamią zasad bezpieczeństwa z pkt 1.
-       3. `CLAUDE.md` w katalogu edytowanego pliku (np. `gui/CLAUDE.md`).
+       3. `CLAUDE.md` w katalogu edytowanego pliku (np. `ut-angular/CLAUDE.md`).
        4. `agents-tasks-knowledge/tasks/CLAUDE.md` – proces dla katalogów w `tasks/`.
        5. `agents-tasks-knowledge/CLAUDE.md` – definicje statusów, zasady `SESSION*.md`, HANDOFF.
        6. Ten plik (`CLAUDE.md` w root repo).
@@ -204,7 +204,7 @@ Prośba o założenie nowego zadania traktuj jako **nowy nadrzędny cel** – na
 ## 3. Styl pracy i minimalizowanie halucynacji
 
 1. Zawsze opieraj się na realnych plikach:
-    - cytuj ścieżki (`gui/src/app/...`, `agents-tasks-knowledge/...`),
+    - cytuj ścieżki (`ut-angular/src/app/...`, `agents-tasks-knowledge/...`),
     - pokazuj krótkie fragmenty kodu zamiast wymyślać abstrakcyjne przykłady.
 2. Jeśli czegoś **nie ma** w repo (brak pliku, brak skryptu, brak migracji):
     - powiedz to wprost,
@@ -228,7 +228,7 @@ Prośba o założenie nowego zadania traktuj jako **nowy nadrzędny cel** – na
     - opisz spodziewany efekt i ryzyko.
 
 2. Preferuj istniejące mechanizmy projektu:
-    - frontend – komendy `make` / `npm` zdefiniowane w `gui/`.
+    - frontend – komendy `make` / `npm` zdefiniowane w `ut-angular/`.
     - zanim zaproponujesz „gołe” `docker compose`, `phpunit`, `ng serve` itd. – sprawdź, czy nie ma odpowiedniego celu w `Makefile` / `package.json`.
 
 3. Zanim zaproponujesz nową bibliotekę / framework:
@@ -254,7 +254,7 @@ Prośba o założenie nowego zadania traktuj jako **nowy nadrzędny cel** – na
 ## 5. Jak proponować zmiany w kodzie
 
 1. Zawsze wskazuj **konkretne ścieżki plików**:
-    - frontend: `gui/src/app/...`, `gui/src/assets/...`,
+    - frontend: `ut-angular/src/app/...`, `ut-angular/src/assets/...`,
     - zadania: `agents-tasks-knowledge/tasks/<ID-Z>_<status>/tasks.md` itp.
 
 2. Preferowany format zmian:
@@ -277,7 +277,7 @@ Prośba o założenie nowego zadania traktuj jako **nowy nadrzędny cel** – na
 
 3. Po każdej propozycji zmian zaproponuj **konkretne testy** do odpalenia:
     - frontend:
-        - odpowiednie skrypty `npm` (`npm test`, `npm run lint`, e2e), według `gui/package.json`.
+        - odpowiednie skrypty `npm` (`npm test`, `npm run lint`, e2e), według `ut-angular/package.json`.
 
 4. Przy zmianach wielowarstwowych (np. nowy feature od bazy po GUI):
     - rozbij to na kilka `ID-T` w `tasks.md`,

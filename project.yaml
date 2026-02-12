@@ -10,7 +10,7 @@ project:
 components:
   gui:
     enabled: true
-    directory: "gui"
+    directory: "ut-angular"
     framework: "angular"
     version: "x.y"
     mcp_servers:
@@ -31,5 +31,5 @@ agent_profiles:
     model: "gpt-5.2-codex"
     type: "frontend"
     component: "gui"
-    default_directory: "gui"
+    default_directory: "ut-angular"
     description: "Agent frontendowy"

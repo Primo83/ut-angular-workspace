@@ -719,7 +719,7 @@ Po PASS wpisz nazwy raportów w `tasks.md` i odhacz checklistę „przed done”
 
 ## Narzędzia, z których możesz korzystać podczas realizacji (w pierwszej kolejności)
 
-* `Makefile` w repozytoriach komponentów (np. `ut-angular`),
+* `Makefile` w repozytoriach komponentów (np. `gui`),
 * serwer MCP `playwright` – szczególnie przy pracy z GUI,
 * serwer MCP `chrome-devtools` – logi przeglądarki / network dla GUI.
 

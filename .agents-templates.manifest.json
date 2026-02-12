@@ -53,12 +53,12 @@
     "agents-tasks-knowledge/tasks/template-workspace-config-sync-audit_proposal/additional-notes/README.md",
     "agents-tasks-knowledge/tasks/template-workspace-config-sync-audit_proposal/tasks.md",
     "doctor",
-    "gui/origin-AGENTS.md",
-    "gui/origin-CLAUDE.md",
-    "gui/origin-GEMINI.md",
     "origin-AGENTS.md",
     "origin-CLAUDE.md",
     "origin-GEMINI.md",
-    "taskctl"
+    "taskctl",
+    "ut-angular/origin-AGENTS.md",
+    "ut-angular/origin-CLAUDE.md",
+    "ut-angular/origin-GEMINI.md"
   ]
 }

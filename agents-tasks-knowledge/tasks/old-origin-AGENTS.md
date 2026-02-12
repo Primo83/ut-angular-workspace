@@ -62,7 +62,7 @@ Przykład nowego katalogu:
 Nazwa katalogu:
 
 - `230101-feature-employee-reports` – dowolny identyfikator (np. data + krótki opis),
-- `_proposal` – startowy status zadania (`proposal`, `to-do`, `planning`, `planned`, `in-progress`, `on-hold`, `done` – patrz definicje w `CLAUDE.md` w katalogu `agents-tasks-knowledge/`).
+- `_proposal` – startowy status zadania (`proposal`, `to-do`, `planning`, `planned`, `in-progress`, `on-hold`, `done` – patrz definicje w `AGENTS.md` w katalogu `agents-tasks-knowledge/`).
 
 W nowym katalogu powinny być:
 
@@ -191,7 +191,7 @@ _Tu lądują ważniejsze decyzje z historii czatu, w formie timeline'u._
 _Zwięzłe podsumowanie, które jest mostem do `tasks.md`:_
 
 - Backend (frontend-only-api): ...
-- GUI (ut-angular): ...
+- GUI (gui): ...
 - Dane / migracje: ...
 - Testy / kryteria DONE: ...
 
@@ -356,7 +356,7 @@ W `tasks.md` tworzysz **tabelę kroków**. Każdy wiersz to zadanie (`ID-T`).
 ### 4.1. Minimalne kolumny (przypomnienie)
 
 - `ID-T` – numer zadania / pod‑zadania (np. `01`, `01-01`, `01-02`),
-- `Status` – wg sekcji „Files statuses” w `CLAUDE.md` w katalogu `agents-tasks-knowledge/`,
+- `Status` – wg sekcji „Files statuses” w `AGENTS.md` w katalogu `agents-tasks-knowledge/`,
 - `Agent` – identyfikator agenta lub osoby, która jest „właścicielem” wiersza (np. `api-1`, `gui-1`, `ba`, `human-pm`). W trybie multi‑agent techniczne agenty biorą **tylko** wiersze z `Agent = ich AGENT_ID` lub z pustym `Agent` (który przy starcie pracy uzupełniają).
 - `Rodzic` – `ID-T` zadania nadrzędnego (dla pod‑zadań),
 - `Zadanie` – krótki, konkretny opis,
@@ -496,7 +496,7 @@ Przy tworzeniu pierwszego szkicu `tasks.md`:
 Agent, który będzie realizował później krok `02` albo `03-01`, ma obowiązek:
 
 - sprawdzić wcześniejsze wiersze w `tasks.md` pod kątem `[HANDOFF: <jego ID-T>]`,
-- przeczytać odpowiednie sekcje w `additional-notes/<ID-T-kontekstu>.md` zgodnie z głównym `CLAUDE.md`.
+- przeczytać odpowiednie sekcje w `additional-notes/<ID-T-kontekstu>.md` zgodnie z głównym `AGENTS.md`.
 
 ## 9. Flow właściciel ↔ agent (agent CLI – np. codex-cli, Claude Code, Gemini CLI)
 
