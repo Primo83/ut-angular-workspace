@@ -19,16 +19,18 @@
 - 2026-02-12 13:48:17 Zacommitowano i wypchnięto aktualizację `CONTINUITY.md`.
 - 2026-02-12 13:49:07 Uporządkowano `CONTINUITY.md` (stan i pytania) po udanym push do `origin/main`.
 - 2026-02-12 13:55:01 Dopisano do „Surowych danych” w `additional-contexts.md`, że projekt ma być w `ut-angular/` i Git jest wspólny dla całego workspace.
+- 2026-02-12 13:58:56 Zacommitowano i wypchnięto nowy task (`20260212-1353-wgranie-najnowszego-angulara-docker-compose_proposal`) oraz porządki (`.gitignore`, `SESSION_gui-1.md`, `CONTINUITY.md`).
 
 # Now:
-- 2026-02-12 13:56:04 ID‑T=01: doprecyzowanie `additional-contexts.md` i planu (kolejne wiersze w `tasks.md`).
+- 2026-02-12 13:58:56 ID‑T=01: doprecyzowanie `additional-contexts.md` i planu (kolejne wiersze w `tasks.md`).
 
 # Next:
-- Uzupełnić `additional-contexts.md` (sekcja „Surowe dane”) i przygotować plan (ID‑T=01) dla nowego zadania.
+- Uzupełnić `additional-contexts.md` (karta zadania, zakres, kryteria) i rozpisać plan w `tasks.md` (ID‑T=02+), potem audyty planu.
 
 # Open questions (UNCONFIRMED if needed):
 - UNCONFIRMED Co znaczy „najnowszy Angular”: najnowszy stabilny major/minor, czy ograniczenie do LTS/kompatybilności z Nx/Node w projekcie?
 - UNCONFIRMED Jak ma wyglądać „oparte o docker compose”: devcontainer/`docker compose up` dla `npm ci` + `ng serve`, czy też build/test w CI?
+- UNCONFIRMED Czy dotychczasowy komponent `gui/` zostaje, czy przechodzimy na `ut-angular/` jako docelowy katalog aplikacji (i aktualizujemy `project.yaml`)?
 
 # Working set (files/ids/commands):
 - Files: `CONTINUITY.md`, `agents-tasks-knowledge/tasks/<NOWE>_proposal/*`, `agents-tasks-knowledge/SESSION_gui-1.md`
