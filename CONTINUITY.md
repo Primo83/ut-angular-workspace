@@ -10,6 +10,7 @@
 - Implementacja (ta tura): przebudowac tooltipy na customowe (dluzsze opisy + ladniejszy styl z zaokraglonymi ramkami) dla `/minisearch`.
 - Implementacja (ta tura): skorygowac sekcje inspiracji `floating-toc` na podstawie realnego audytu "co wdrozone vs co odlozone", zamiast listy 1:1.
 - Implementacja (ta tura): usunac calkowicie blok "Inspiracja (nie kopia 1:1) / Co wdrozylismy / Co swiadomie odlozylismy" z `/minisearch`.
+- Implementacja (ta tura): przetlumaczyc tresc zaindeksowanych dokumentow (dataset `minisearch-docs.json`) na jezyk polski.
 
 # Constraints/Assumptions:
 - Nie commitować sekretów; `/.env.test-accounts` ma pozostać lokalne (ignorowane przez Git).
@@ -110,9 +111,11 @@
 - 2026-02-13 00:09:56 Potwierdzono walidacje `ID-T=52`: `make -C ut-angular test` = 52/52 PASS, `make -C ut-angular lint` = PASS; domknieto `ID-T=52` i przywrocono `SESSION_gui-1` na `ID-T=09`.
 - 2026-02-13 00:19:06 Dodano i zrealizowano `ID-T=53`: usunieto caly blok "Inspiracja / Co wdrozylismy / Co swiadomie odlozylismy" z `minisearch-page.component.html`, wyczyszczono nieuzywane klasy `.ms-custom-note__source`, `__subtitle`, `__func-list` w SCSS i zaktualizowano test komponentu pod nowy stan.
 - 2026-02-13 00:19:06 Potwierdzono walidacje `ID-T=53`: `make -C ut-angular test` = 52/52 PASS, `make -C ut-angular lint` = PASS; ustawiono `SESSION_gui-1` z powrotem na `ID-T=09`.
+- 2026-02-13 01:27:43 Przetlumaczono tresc zaindeksowanych dokumentow: `ut-angular/public/minisearch-docs.json` (200 wpisow) oraz tytuly OFFLINE_DOCS w `ut-angular/src/app/minisearch/minisearch-search.service.ts`. Weryfikacja: `make -C ut-angular test` = 55/55 PASS, `make -C ut-angular lint` = PASS.
 
 # Now:
 - 2026-02-13 00:19:06 Trwa kontynuacja `ID-T=09` po domknieciu `ID-T=53` (gotowosc do finalnych audytow zamykajacych task).
+- 2026-02-13 01:27:43 Wznowiono `ID-T=09` po domknieciu `ID-T=55` (spolszczenie datasetu dokumentow).
 
 # Next:
 - Jesli pojawi sie potrzeba merytoryczna: rozwazyc backlog dla `stripHtml/getStepContentPlainText`, n-gramow i freshness po dopieciu metadanych.
@@ -125,4 +128,5 @@
 # Working set (files/ids/commands):
 - Task: `agents-tasks-knowledge/tasks/20260212-2023-ulepszenia-prezentacji-minisearch-50-smaczkow-i-dopracowanie-ux_in-progress`
 - Files: `CONTINUITY.md`, `agents-tasks-knowledge/SESSION_gui-1.md`, `agents-tasks-knowledge/tasks/20260212-2023-ulepszenia-prezentacji-minisearch-50-smaczkow-i-dopracowanie-ux_in-progress/tasks.md`, `agents-tasks-knowledge/tasks/20260212-2023-ulepszenia-prezentacji-minisearch-50-smaczkow-i-dopracowanie-ux_in-progress/additional-contexts.md`, `agents-tasks-knowledge/tasks/20260212-2023-ulepszenia-prezentacji-minisearch-50-smaczkow-i-dopracowanie-ux_in-progress/additional-notes/09-audyt-pokrycia-50-smaczkow.md`, `ut-angular/src/app/minisearch/minisearch-search.service.ts`, `ut-angular/src/app/minisearch/minisearch-page.component.ts`, `ut-angular/src/app/minisearch/minisearch-page.component.html`, `ut-angular/src/app/minisearch/minisearch-page.component.scss`, `ut-angular/src/app/minisearch/minisearch-search.service.spec.ts`, `ut-angular/src/app/minisearch/minisearch-page.component.spec.ts`
+- Docs dataset: `ut-angular/public/minisearch-docs.json`
 - Commands: `./taskctl set-id-t-status ...`, `./taskctl move-status ...`, `./taskctl set-session ...`, `./doctor --json`

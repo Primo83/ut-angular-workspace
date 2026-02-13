@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, ElementRef, viewChild, HostListener } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, ElementRef, viewChild, HostListener } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MiniSearchService, DocRecord, EnrichedResult, SearchOptions } from './minisearch-search.service';
@@ -8,6 +8,11 @@ interface CodeSnippet {
   title: string;
   code: string;
   docUrl: string;
+}
+
+interface SearchHistoryEntry {
+  timeMs: number;
+  resultCount: number;
 }
 
 @Component({
@@ -24,6 +29,67 @@ export class MiniSearchPageComponent implements OnInit {
   protected readonly liveMessage = signal<string>('');
   protected readonly liveMessageType = signal<'success' | 'error'>('success');
   protected readonly showAdvanced = signal(false);
+  protected readonly searchHistory = signal<SearchHistoryEntry[]>([]);
+  private static readonly MAX_SPARKLINE_POINTS = 20;
+
+  protected readonly sparklineData = computed(() => {
+    const history = this.searchHistory();
+    if (history.length < 2) return null;
+    const W = 280, H = 48, P = 4;
+    const times = history.map(e => e.timeMs);
+    const maxTime = Math.max(...times, 0.1);
+    const points = history.map((e, i) => ({
+      x: +(P + (i / (history.length - 1)) * (W - 2 * P)).toFixed(1),
+      y: +(H - P - (e.timeMs / maxTime) * (H - 2 * P)).toFixed(1),
+      timeMs: e.timeMs,
+      resultCount: e.resultCount,
+    }));
+    const coords = points.map(p => `${p.x} ${p.y}`);
+    const linePath = 'M ' + coords.join(' L ');
+    const last = points[points.length - 1];
+    const first = points[0];
+    const areaPath = linePath + ` L ${last.x} ${H - P} L ${first.x} ${H - P} Z`;
+    return {
+      linePath,
+      areaPath,
+      lastPoint: last,
+      points,
+      stats: {
+        min: Math.min(...times),
+        max: Math.max(...times),
+        avg: times.reduce((a, b) => a + b, 0) / times.length,
+      },
+    };
+  });
+
+  protected readonly hoveredSparklineIdx = signal<number | null>(null);
+
+  protected readonly hoveredSparklinePoint = computed(() => {
+    const idx = this.hoveredSparklineIdx();
+    const spark = this.sparklineData();
+    if (idx === null || !spark) return null;
+    return spark.points[idx];
+  });
+
+  protected onSparklineMove(event: MouseEvent): void {
+    const spark = this.sparklineData();
+    if (!spark) return;
+    const el = event.currentTarget as HTMLElement;
+    const rect = el.getBoundingClientRect();
+    const svgX = ((event.clientX - rect.left) / rect.width) * 280;
+    let closest = 0;
+    let minDist = Infinity;
+    for (let i = 0; i < spark.points.length; i++) {
+      const dist = Math.abs(spark.points[i].x - svgX);
+      if (dist < minDist) { minDist = dist; closest = i; }
+    }
+    this.hoveredSparklineIdx.set(closest);
+  }
+
+  protected onSparklineLeave(): void {
+    this.hoveredSparklineIdx.set(null);
+  }
+
   private debounceTimer: ReturnType<typeof setTimeout> | null = null;
   private liveIdCounter = 9900;
 
@@ -44,6 +110,8 @@ export class MiniSearchPageComponent implements OnInit {
   protected readonly snapshotLoadTime = signal<number>(0);
 
   protected readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
+  protected readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
+  protected readonly customFileError = signal<string | null>(null);
 
   readonly availableFields = ['title', 'text', 'tags'];
   readonly availableRoles = ['all', 'guest', 'admin'];
@@ -138,6 +206,15 @@ const restored = MiniSearch.loadJSON(json, {
     if (this.debounceTimer) clearTimeout(this.debounceTimer);
     this.debounceTimer = setTimeout(() => {
       this.svc.search(value);
+      if (value.trim()) {
+        this.searchHistory.update(h => {
+          const entry: SearchHistoryEntry = {
+            timeMs: this.svc.searchTimeMs(),
+            resultCount: this.svc.results().length,
+          };
+          return [...h, entry].slice(-MiniSearchPageComponent.MAX_SPARKLINE_POINTS);
+        });
+      }
     }, 200);
   }
 
@@ -187,6 +264,10 @@ const restored = MiniSearch.loadJSON(json, {
 
   protected onNumberChange(key: keyof SearchOptions, value: string): void {
     this.svc.updateOption(key, parseInt(value, 10) as SearchOptions[typeof key]);
+  }
+
+  protected onIndexNumberChange(key: keyof SearchOptions, value: string): void {
+    this.svc.updateIndexOption(key, parseInt(value, 10) as SearchOptions[typeof key]);
   }
 
   protected onTextChange(key: keyof SearchOptions, value: string): void {
@@ -244,6 +325,18 @@ const restored = MiniSearch.loadJSON(json, {
 
   protected formatScore(score: number): string {
     return score.toFixed(2);
+  }
+
+  protected rerunSearch(): void {
+    if (!this.queryInput.trim()) return;
+    this.svc.search(this.queryInput);
+    this.searchHistory.update(h => {
+      const entry: SearchHistoryEntry = {
+        timeMs: this.svc.searchTimeMs(),
+        resultCount: this.svc.results().length,
+      };
+      return [...h, entry].slice(-MiniSearchPageComponent.MAX_SPARKLINE_POINTS);
+    });
   }
 
   protected clearSearch(): void {
@@ -308,8 +401,111 @@ const restored = MiniSearch.loadJSON(json, {
         category: ['concepts', 'api', 'examples', 'use-cases'][i % 4],
       });
     }
-    await this.svc.addAllDocumentsAsync(batch, 20);
-    this.showLiveMessage(`Dodano asynchronicznie ${batch.length} dokumentów (addAllAsync, chunk=20).`);
+    await this.svc.addAllDocumentsAsync(batch, 10);
+    this.showLiveMessage(`Dodano asynchronicznie ${batch.length} dokumentów (addAllAsync, chunk=10).`);
+  }
+
+  /** Dodaj 1000 async — duży test wydajności addAllAsync */
+  protected async addBatchDocuments1000Async(): Promise<void> {
+    const batch: DocRecord[] = [];
+    const categories = ['concepts', 'api', 'examples', 'use-cases'];
+    const topics = [
+      'Indeksowanie', 'Wyszukiwanie', 'Tokenizacja', 'Ranking', 'Filtrowanie',
+      'Sortowanie', 'Paginacja', 'Cache', 'Optymalizacja', 'Konfiguracja',
+    ];
+    for (let i = 0; i < 1000; i++) {
+      const topic = topics[i % topics.length];
+      batch.push({
+        id: ++this.liveIdCounter,
+        title: `${topic} #${i + 1}: Dokument testowy`,
+        text: `Treść dokumentu nr ${i + 1} dotyczącego tematu ${topic.toLowerCase()}. Wygenerowany dla demonstracji addAllAsync z dużym zbiorem danych (1000 dokumentów).`,
+        tags: ['async', 'batch-1k', `nr${i + 1}`],
+        category: categories[i % 4],
+      });
+    }
+    await this.svc.addAllDocumentsAsync(batch, 50);
+    this.showLiveMessage(`Dodano asynchronicznie ${batch.length} dokumentów (addAllAsync, chunk=50).`);
+  }
+
+  /** Import własnego pliku JSON z walidacją */
+  protected triggerFileImport(): void {
+    this.fileInput()?.nativeElement?.click();
+  }
+
+  protected async onFileSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input?.files?.[0];
+    if (!file) return;
+    this.customFileError.set(null);
+
+    try {
+      const text = await file.text();
+      let data: unknown;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        this.customFileError.set('Plik nie jest poprawnym JSON-em.');
+        input.value = '';
+        return;
+      }
+
+      const validation = this.validateDocRecords(data);
+      if (!validation.valid) {
+        this.customFileError.set(validation.errors.join(' '));
+        input.value = '';
+        return;
+      }
+
+      const docs = (data as DocRecord[]).map(d => ({
+        ...d,
+        id: ++this.liveIdCounter,
+      }));
+
+      if (docs.length > 100) {
+        await this.svc.addAllDocumentsAsync(docs, 50);
+      } else {
+        this.svc.addAllDocuments(docs);
+      }
+      this.showLiveMessage(`Zaimportowano ${docs.length} dokumentów z pliku \u201E${file.name}\u201D.`);
+    } catch (e) {
+      this.customFileError.set(`Błąd odczytu: ${e instanceof Error ? e.message : 'nieznany'}`);
+    }
+
+    input.value = '';
+  }
+
+  private validateDocRecords(data: unknown): { valid: boolean; errors: string[] } {
+    const errors: string[] = [];
+
+    if (!Array.isArray(data)) {
+      return { valid: false, errors: ['Oczekiwana tablica JSON ([...]), otrzymano inny typ.'] };
+    }
+    if (data.length === 0) {
+      return { valid: false, errors: ['Tablica jest pusta \u2014 brak dokument\u00F3w do zaimportowania.'] };
+    }
+
+    const sample = data.slice(0, 10);
+    for (let i = 0; i < sample.length; i++) {
+      const el = sample[i];
+      if (typeof el !== 'object' || el === null) {
+        errors.push(`[${i}] nie jest obiektem.`);
+        continue;
+      }
+      if (!('title' in el) || typeof el.title !== 'string' || !el.title.trim()) {
+        errors.push(`[${i}] brak lub pusty "title".`);
+      }
+      if (!('text' in el) || typeof el.text !== 'string') {
+        errors.push(`[${i}] brak pola "text".`);
+      }
+      if ('tags' in el && !Array.isArray(el.tags)) {
+        errors.push(`[${i}] pole "tags" nie jest tablic\u0105.`);
+      }
+      if ('category' in el && typeof el.category !== 'string') {
+        errors.push(`[${i}] pole "category" nie jest stringiem.`);
+      }
+    }
+
+    return { valid: errors.length === 0, errors };
   }
 
   /** ID-T 42: remove — usuwa dokument po ID */

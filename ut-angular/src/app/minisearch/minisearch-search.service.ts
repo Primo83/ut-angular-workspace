@@ -96,12 +96,12 @@ interface HighlightRange {
 /** Wbudowany zestaw offline (ID-T 11) */
 const OFFLINE_DOCS: DocRecord[] = [
   { id: 1, title: 'Wyszukiwanie pełnotekstowe', text: 'MiniSearch umożliwia błyskawiczne przeszukiwanie dokumentów po treści — bez backendu i serwera.', tags: ['search', 'fulltext'], category: 'concepts', url: 'https://github.com/lucaong/minisearch/search?q=full-text+search&type=code', metadata: { author: 'Jan Kowalski', version: '2.1' } },
-  { id: 2, title: 'Prefix search', text: 'Wyszukiwanie prefiksowe dopasowuje słowa zaczynające się od wpisanego fragmentu.', tags: ['prefix', 'autocomplete'], category: 'concepts', url: 'https://github.com/lucaong/minisearch/search?q=prefix&type=code', metadata: { author: 'Anna Nowak', version: '1.3' } },
-  { id: 3, title: 'Fuzzy search', text: 'Wyszukiwanie rozmyte toleruje literówki — "anglar" znajdzie "angular".', tags: ['fuzzy', 'typos'], category: 'concepts', metadata: { author: 'Jan Kowalski', version: '1.0' } },
-  { id: 4, title: 'Field boosting', text: 'Boosting pól pozwala nadać większą wagę dopasowaniom w tytule niż w treści.', tags: ['boost', 'relevance'], category: 'api', metadata: { author: 'Piotr Wiśniewski', version: '3.0' } },
-  { id: 5, title: 'Auto-suggest', text: 'Funkcja autoSuggest generuje podpowiedzi wyszukiwania w czasie rzeczywistym.', tags: ['suggest', 'autocomplete'], category: 'api', metadata: { author: 'Anna Nowak', version: '2.0' } },
+  { id: 2, title: 'Wyszukiwanie prefiksowe (prefix search)', text: 'Wyszukiwanie prefiksowe dopasowuje słowa zaczynające się od wpisanego fragmentu.', tags: ['prefix', 'autocomplete'], category: 'concepts', url: 'https://github.com/lucaong/minisearch/search?q=prefix&type=code', metadata: { author: 'Anna Nowak', version: '1.3' } },
+  { id: 3, title: 'Wyszukiwanie rozmyte (fuzzy search)', text: 'Wyszukiwanie rozmyte toleruje literówki — "anglar" znajdzie "angular".', tags: ['fuzzy', 'typos'], category: 'concepts', metadata: { author: 'Jan Kowalski', version: '1.0' } },
+  { id: 4, title: 'Boosting pól (field boosting)', text: 'Boosting pól pozwala nadać większą wagę dopasowaniom w tytule niż w treści.', tags: ['boost', 'relevance'], category: 'api', metadata: { author: 'Piotr Wiśniewski', version: '3.0' } },
+  { id: 5, title: 'Podpowiedzi (autoSuggest)', text: 'Funkcja autoSuggest generuje podpowiedzi wyszukiwania w czasie rzeczywistym.', tags: ['suggest', 'autocomplete'], category: 'api', metadata: { author: 'Anna Nowak', version: '2.0' } },
   { id: 6, title: 'Filtrowanie wyników', text: 'Callback filter pozwala ograniczyć wyniki do określonej kategorii.', tags: ['filter', 'callback'], category: 'api' },
-  { id: 7, title: 'Live indexing', text: 'Dokumenty można dodawać, usuwać i zamieniać w locie — bez restartu silnika.', tags: ['add', 'remove', 'replace'], category: 'examples' },
+  { id: 7, title: 'Indeksowanie na żywo (live indexing)', text: 'Dokumenty można dodawać, usuwać i zamieniać w locie — bez restartu silnika.', tags: ['add', 'remove', 'replace'], category: 'examples' },
   { id: 8, title: 'Serializacja indeksu', text: 'Indeks można zapisać do JSON i odtworzyć bez ponownego indeksowania.', tags: ['json', 'serialize'], category: 'examples', metadata: { author: 'Piotr Wiśniewski', version: '1.5' } },
   { id: 9, title: 'Tokenizer niestandardowy', text: 'Możesz podać własną funkcję tokenizującą tekst.', tags: ['tokenize', 'custom'], category: 'api', metadata: { author: 'Jan Kowalski', version: '1.0' } },
   { id: 10, title: 'Dokumentacja offline', text: 'MiniSearch napędza wyszukiwanie w VitePress i Docusaurus — działa bez sieci.', tags: ['docs', 'vitepress'], category: 'use-cases', metadata: { author: 'Anna Nowak', version: '2.5' } },
@@ -587,7 +587,8 @@ export class MiniSearchService {
       this.miniSearch.addAll(chunk);
       this.documents.push(...chunk);
       this.asyncProgress.set(Math.round(((i + chunk.length) / total) * 100));
-      await new Promise(resolve => setTimeout(resolve, 0));
+      // Dłuższy delay, żeby przeglądarka zdążyła wyrenderować pasek postępu
+      await new Promise(resolve => setTimeout(resolve, 120));
     }
     this.documentCount.set(this.miniSearch.documentCount);
     const cats = [...new Set(this.documents.map(d => d.category))].sort();

@@ -127,6 +127,13 @@
           [attr.aria-pressed]="svc.options().combineWith !== 'OR'"
           [attr.data-tooltip]="getCombineTooltip()"
         >{{ getCombineLabel() }}</button>
+        <button
+          class="ms-toggle"
+          [class.ms-toggle--active]="svc.options().ngramEnabled"
+          (click)="toggleIndexOption('ngramEnabled')"
+          [attr.aria-pressed]="svc.options().ngramEnabled"
+          data-tooltip="Przełącza indeks na n-gramy (podciągi znaków). Zamiast pełnych słów wyszukiwarka rozbija tekst na krótkie fragmenty — dzięki temu znajdzie wyniki nawet po wpisaniu środkowej części słowa. Reszta opcji (prefix, fuzzy, boost) zostaje bez zmian, żebyś mógł uczciwie porównać czas na wykresie."
+        >N-gram</button>
       </div>
 
       <!-- Category Filters -->
@@ -562,7 +569,7 @@
                 <div class="ms-advanced__slider-row">
                   <label for="adv-ngram-size">Rozmiar n:</label>
                   <input id="adv-ngram-size" type="range" min="2" max="5" step="1" [value]="svc.options().ngramSize"
-                    (input)="onNumberChange('ngramSize', $any($event.target).value); toggleIndexOption('ngramEnabled')"
+                    (input)="onIndexNumberChange('ngramSize', $any($event.target).value)"
                     data-tooltip="Długość fragmentów, na które dzielone są słowa. Mniejsza liczba = więcej wyników (ale mniej precyzyjnych). Większa liczba = mniej wyników (ale bardziej trafnych)." />
                   <span class="ms-advanced__value">{{ svc.options().ngramSize }}</span>
                 </div>
@@ -594,6 +601,56 @@
           <span>{{ svc.results().length }} wyników</span>
           <span class="ms-meta__dot">&middot;</span>
           <span>{{ svc.searchTimeMs() | number:'1.2-2' }} ms</span>
+          <button class="ms-meta__rerun" (click)="rerunSearch()"
+            data-tooltip="Ponawia wyszukiwanie z tą samą frazą — przydatne po zmianie opcji (np. przełączeniu indeksu), żeby zobaczyć różnicę czasu na wykresie.">
+            Ponów
+          </button>
+        </div>
+      }
+
+      <!-- Sparkline Performance Chart -->
+      @if (sparklineData(); as spark) {
+        <div class="ms-sparkline">
+          <div class="ms-sparkline__header">
+            <span class="ms-sparkline__title">Wydajność wyszukiwania</span>
+            <span class="ms-sparkline__stats">
+              min {{ spark.stats.min | number:'1.1-1' }} ms
+              &middot; avg {{ spark.stats.avg | number:'1.1-1' }} ms
+              &middot; max {{ spark.stats.max | number:'1.1-1' }} ms
+            </span>
+          </div>
+          <div class="ms-sparkline__chart-wrap"
+               (mousemove)="onSparklineMove($event)"
+               (mouseleave)="onSparklineLeave()">
+            <svg class="ms-sparkline__chart" viewBox="0 0 280 48" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="rgba(99, 102, 241, 0.25)" />
+                  <stop offset="100%" stop-color="rgba(99, 102, 241, 0)" />
+                </linearGradient>
+              </defs>
+              <path [attr.d]="spark.areaPath" fill="url(#sparkGrad)" />
+              <path [attr.d]="spark.linePath" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              @if (hoveredSparklinePoint(); as hov) {
+                <line [attr.x1]="hov.x" [attr.x2]="hov.x" y1="0" y2="48"
+                      stroke="rgba(244,114,182,0.5)" stroke-width="0.5" stroke-dasharray="2 2" />
+                <circle [attr.cx]="hov.x" [attr.cy]="hov.y" r="3.5" fill="#f472b6" />
+              }
+              <circle [attr.cx]="spark.lastPoint.x" [attr.cy]="spark.lastPoint.y" r="3" fill="#818cf8" class="ms-sparkline__dot" />
+            </svg>
+            @if (hoveredSparklinePoint(); as hov) {
+              <div class="ms-sparkline__tooltip" [style.left.%]="hov.x / 2.8">
+                {{ hov.timeMs | number:'1.2-2' }} ms &middot; {{ hov.resultCount }} wyn.
+              </div>
+            }
+          </div>
+          <div class="ms-sparkline__footer">
+            <span>{{ searchHistory().length }} zapytań w historii</span>
+            <span class="ms-sparkline__current">
+              ostatni: {{ spark.points[spark.points.length - 1].timeMs | number:'1.2-2' }} ms
+              &middot; {{ spark.points[spark.points.length - 1].resultCount }} wyn.
+            </span>
+          </div>
         </div>
       }
 
@@ -713,11 +770,43 @@
             data-tooltip="Generuje 100 dokumentów testowych i dodaje je w tle, paczkami po 20. Interfejs nie zamraża się — widać pasek postępu. Pokazuje, jak obsługiwać duże ilości danych.">
             Dodaj 100 async (addAllAsync)
           </button>
+          <button class="ms-btn ms-btn--secondary" (click)="addBatchDocuments1000Async()" [disabled]="svc.asyncProgress() !== null"
+            data-tooltip="Generuje 1000 dokumentów testowych i dodaje je asynchronicznie, paczkami po 50. Prawdziwy test wydajności — obserwuj pasek postępu i czas indeksowania.">
+            Dodaj 1000 async
+          </button>
         </div>
         @if (svc.asyncProgress() !== null) {
           <div class="ms-progress-bar" role="progressbar" [attr.aria-valuenow]="svc.asyncProgress()" aria-valuemin="0" aria-valuemax="100">
             <div class="ms-progress-bar__fill" [style.width.%]="svc.asyncProgress()"></div>
             <span class="ms-progress-bar__label">{{ svc.asyncProgress() }}%</span>
+          </div>
+        }
+      </div>
+
+      <!-- Import własnego pliku JSON -->
+      <div class="ms-file-import">
+        <h3 class="ms-live-form__title">Doindeksuj własny plik</h3>
+        <p class="ms-advanced__hint" style="margin-bottom: 0.75rem;">
+          Wczytaj plik JSON z tablicą dokumentów. Wymagane pola: <code>title</code> (string), <code>text</code> (string).
+          Opcjonalne: <code>tags</code> (string[]), <code>category</code> (string).
+        </p>
+        <input
+          #fileInput
+          type="file"
+          accept=".json,application/json"
+          (change)="onFileSelected($event)"
+          style="display: none;"
+        />
+        <div class="ms-file-import__actions">
+          <button class="ms-btn ms-btn--primary ms-btn--sm" (click)="triggerFileImport()" [disabled]="svc.asyncProgress() !== null"
+            data-tooltip="Otwiera okno wyboru pliku. Plik musi być w formacie JSON i zawierać tablicę obiektów z polami title i text. Po wczytaniu dokumenty zostaną automatycznie zaindeksowane.">
+            Wybierz plik JSON
+          </button>
+          <span class="ms-file-import__hint">Akceptowane: .json</span>
+        </div>
+        @if (customFileError()) {
+          <div class="ms-file-import__error" role="alert">
+            <strong>Błąd walidacji:</strong> {{ customFileError() }}
           </div>
         }
       </div>
@@ -1042,6 +1131,14 @@
           <p>
             Każdy wynik ma link 'Otwórz dokument", a każdy smaczek w 'Szybkiej ściądze"
             prowadzi do odpowiedniego fragmentu dokumentacji.
+          </p>
+        </div>
+        <div class="ms-custom-solutions__card ms-custom-solutions__card--sparkline">
+          <h3>Sparkline wydajności na żywo</h3>
+          <p>
+            Wyszukaj kilka razy &mdash; pod wynikami pojawi się animowany mini-wykres
+            z historią czasów odpowiedzi. Pulsująca kropka, gradient i statystyki
+            <code>min</code>/<code>avg</code>/<code>max</code> aktualizują się z każdym keystroke.
           </p>
         </div>
       </div>
